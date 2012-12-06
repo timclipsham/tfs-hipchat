@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
+using Microsoft.TeamFoundation.VersionControl.Common;
 
 namespace TfsHipChat
 {
