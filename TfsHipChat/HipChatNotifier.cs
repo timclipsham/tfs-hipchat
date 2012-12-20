@@ -14,7 +14,12 @@ namespace TfsHipChat
 
         public HipChatNotifier()
         {
-            _hipChatClient = new HipChatClient();
+            _hipChatClient = new HipChatClient
+            {
+                Token = Properties.Settings.Default.Token,
+                RoomId = Properties.Settings.Default.RoomId,
+                From = Properties.Settings.Default.From
+            };
         }
 
         public void SendCheckinNotification(CheckinEvent checkinEvent)
