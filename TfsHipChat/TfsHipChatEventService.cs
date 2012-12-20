@@ -4,16 +4,16 @@ using Microsoft.TeamFoundation.VersionControl.Common;
 
 namespace TfsHipChat
 {
-    public class CheckinEventService : IEventService
+    public class TfsHipChatEventService : IEventService
     {
         private INotifier _notifier;
 
         // TODO: replace poor man's IoC with a full solution
-        public CheckinEventService() : this(new HipChatNotifier())
+        public TfsHipChatEventService() : this(new HipChatNotifier())
         {
         }
 
-        public CheckinEventService(INotifier notifier)
+        public TfsHipChatEventService(INotifier notifier)
         {
             this._notifier = notifier;
         }

@@ -51,7 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckinEventService.cs" />
     <Compile Include="HipChatNotifier.cs" />
     <Compile Include="IEventService.cs" />
     <Compile Include="INotifier.cs" />
@@ -62,6 +61,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="TfsHipChatEventService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

@@ -12,18 +12,18 @@ using System.Collections;
 
 namespace TfsHipChat.Tests
 {
-    public class CheckinEventServiceTests
+    public class TfsHipChatEventServiceTests
     {
         [Fact]
         public void Notify_ShouldThrowException_WhenInvalidXmlData()
         {
             var notifier = Substitute.For<INotifier>();
-            var checkinEventService = new CheckinEventService(notifier);
+            var eventService = new TfsHipChatEventService(notifier);
             const string eventXml = "invalid_xml";
             const string tfsIdentityXml = "invalid_xml";
 
             Assert.Throws<InvalidOperationException>(() => {
-                checkinEventService.Notify(eventXml, tfsIdentityXml);
+                eventService.Notify(eventXml, tfsIdentityXml);
             });
         }
 
@@ -31,11 +31,11 @@ namespace TfsHipChat.Tests
         public void Notify_ShouldSendCheckinNotification_WhenValidCheckinEvent()
         {
             var notifier = Substitute.For<INotifier>();
-            var checkinEventService = new CheckinEventService(notifier);
+            var eventService = new TfsHipChatEventService(notifier);
             string eventXml = GenerateValidCheckinEvent();
             const string tfsIdentityXml = "";
 
-            checkinEventService.Notify(eventXml, tfsIdentityXml);
+            eventService.Notify(eventXml, tfsIdentityXml);
 
             notifier.ReceivedWithAnyArgs().SendCheckinNotification(null);
         }
