@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CheckinEventService.cs" />
+    <Compile Include="HipChatNotifier.cs" />
     <Compile Include="IEventService.cs" />
     <Compile Include="INotifier.cs" />
     <Compile Include="Program.cs" />
