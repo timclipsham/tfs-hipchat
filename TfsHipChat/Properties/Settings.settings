@@ -11,5 +11,8 @@
     <Setting Name="HipChat_From" Type="System.String" Scope="Application">
       <Value Profile="(Default)">TFS</Value>
     </Setting>
+    <Setting Name="TfsServerUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

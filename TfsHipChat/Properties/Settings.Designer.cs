@@ -48,5 +48,14 @@ namespace TfsHipChat.Properties {
                 return ((string)(this["HipChat_From"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TfsServerUrl {
+            get {
+                return ((string)(this["TfsServerUrl"]));
+            }
+        }
     }
 }
