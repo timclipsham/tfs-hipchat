@@ -16,15 +16,15 @@ namespace TfsHipChat
         {
             _hipChatClient = new HipChatClient
             {
-                Token = Properties.Settings.Default.Token,
-                RoomId = Properties.Settings.Default.RoomId,
-                From = Properties.Settings.Default.From
+                Token = Properties.Settings.Default.HipChat_Token,
+                RoomId = Properties.Settings.Default.HipChat_RoomId,
+                From = Properties.Settings.Default.HipChat_From
             };
         }
 
         public void SendCheckinNotification(CheckinEvent checkinEvent)
         {
-            var message = string.Format("Check-in by {0} (changeset {1}): {2}", checkinEvent.Committer, checkinEvent.Number, checkinEvent.Comment);
+            var message = string.Format("{0} checked in changeset {1}\n{2}", checkinEvent.Committer, checkinEvent.Number, checkinEvent.Comment);
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.yellow);
         }
     }

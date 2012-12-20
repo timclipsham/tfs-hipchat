@@ -26,26 +26,26 @@ namespace TfsHipChat.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Token {
+        public string HipChat_Token {
             get {
-                return ((string)(this["Token"]));
+                return ((string)(this["HipChat_Token"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public int RoomId {
+        public int HipChat_RoomId {
             get {
-                return ((int)(this["RoomId"]));
+                return ((int)(this["HipChat_RoomId"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string From {
+        [global::System.Configuration.DefaultSettingValueAttribute("TFS")]
+        public string HipChat_From {
             get {
-                return ((string)(this["From"]));
+                return ((string)(this["HipChat_From"]));
             }
         }
     }
