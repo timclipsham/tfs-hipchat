@@ -19,7 +19,7 @@ namespace TfsHipChat
 
         public void Notify(string eventXml, string tfsIdentityXml)
         {
-            var serializer = new XmlSerializer(typeof(CheckinEventService));
+            var serializer = new XmlSerializer(typeof(CheckinEvent));
             CheckinEvent checkinEvent;
 
             using (var reader = new StringReader(eventXml))
@@ -35,7 +35,7 @@ namespace TfsHipChat
             // check whether the changeset has policy failures
             if (checkinEvent.PolicyFailures.Count > 0)
             {
-
+                
             }
         }
     }
