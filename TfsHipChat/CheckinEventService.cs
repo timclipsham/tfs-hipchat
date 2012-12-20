@@ -24,7 +24,7 @@ namespace TfsHipChat
 
             using (var reader = new StringReader(eventXml))
             {
-                checkinEvent = serializer.Deserialize(reader) as CheckinEvent;  // double check "TryCast"...
+                checkinEvent = serializer.Deserialize(reader) as CheckinEvent;
             }
 
             if (checkinEvent == null)
