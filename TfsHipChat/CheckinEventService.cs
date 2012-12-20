@@ -4,13 +4,23 @@ using Microsoft.TeamFoundation.VersionControl.Common;
 
 namespace TfsHipChat
 {
-    class CheckinEventService : IEventService
+    public class CheckinEventService : IEventService
     {
+        private INotifier _notifier;
+
+        public CheckinEventService()
+        {
+        }
+
+        public CheckinEventService(INotifier notifier)
+        {
+            this._notifier = notifier;
+        }
+
         public void Notify(string eventXml, string tfsIdentityXml)
         {
             var serializer = new XmlSerializer(typeof(CheckinEventService));
             CheckinEvent checkinEvent;
-
 
             using (var reader = new StringReader(eventXml))
             {

@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="CheckinEventService.cs" />
     <Compile Include="IEventService.cs" />
+    <Compile Include="INotifier.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
