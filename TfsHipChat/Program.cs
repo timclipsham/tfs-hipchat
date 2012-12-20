@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
 
 namespace TfsHipChat
 {
@@ -9,6 +10,8 @@ namespace TfsHipChat
             using (var host = new ServiceHost(typeof(CheckinEventService)))
             {
                 host.Open();
+                Console.WriteLine("TfsHipChat started!");
+                Console.ReadLine();
             }
         }
     }
