@@ -8,7 +8,8 @@ namespace TfsHipChat
     {
         private INotifier _notifier;
 
-        public CheckinEventService()
+        // TODO: replace poor man's IoC with a full solution
+        public CheckinEventService() : this(new HipChatNotifier())
         {
         }
 

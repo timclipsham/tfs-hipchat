@@ -12,9 +12,9 @@ namespace TfsHipChat
     {
         private HipChatClient _hipChatClient;
 
-        public HipChatNotifier(HipChatClient hipChatClient)
+        public HipChatNotifier()
         {
-            _hipChatClient = hipChatClient;
+            _hipChatClient = new HipChatClient();
         }
 
         public void SendCheckinNotification(CheckinEvent checkinEvent)
