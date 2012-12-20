@@ -32,11 +32,8 @@ namespace TfsHipChat
                 return;
             }
 
-            // check whether the changeset has policy failures
-            if (checkinEvent.PolicyFailures.Count > 0)
-            {
-                
-            }
+            var message = string.Format("Check-in by {0} (changeset {1}): {2}", checkinEvent.Committer, checkinEvent.Number, checkinEvent.Comment);
+            _notifier.SendMessage(message);
         }
     }
 }
