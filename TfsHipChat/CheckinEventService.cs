@@ -32,8 +32,7 @@ namespace TfsHipChat
                 return;
             }
 
-            var message = string.Format("Check-in by {0} (changeset {1}): {2}", checkinEvent.Committer, checkinEvent.Number, checkinEvent.Comment);
-            _notifier.SendMessage(message);
+            _notifier.SendCheckinNotification(checkinEvent);
         }
     }
 }

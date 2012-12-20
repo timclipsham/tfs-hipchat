@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.TeamFoundation.VersionControl.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace TfsHipChat
 {
     public interface INotifier
     {
-        void SendMessage(string message);
+        void SendCheckinNotification(CheckinEvent checkinEvent);
     }
 }

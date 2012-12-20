@@ -1,4 +1,5 @@
 ﻿using HipChat;
+using Microsoft.TeamFoundation.VersionControl.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,10 @@ namespace TfsHipChat
             _hipChatClient = hipChatClient;
         }
 
-        public void SendMessage(string message)
+        public void SendCheckinNotification(CheckinEvent checkinEvent)
         {
-            _hipChatClient.SendMessage(message);
+            var message = string.Format("Check-in by {0} (changeset {1}): {2}", checkinEvent.Committer, checkinEvent.Number, checkinEvent.Comment);
+            _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.yellow);
         }
     }
 }

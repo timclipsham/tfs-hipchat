@@ -28,7 +28,7 @@ namespace TfsHipChat.Tests
         }
 
         [Fact]
-        public void Notify_ShouldSendMessage_WhenValidCheckinEvent()
+        public void Notify_ShouldSendCheckinNotification_WhenValidCheckinEvent()
         {
             var notifier = Substitute.For<INotifier>();
             var checkinEventService = new CheckinEventService(notifier);
@@ -37,7 +37,7 @@ namespace TfsHipChat.Tests
 
             checkinEventService.Notify(eventXml, tfsIdentityXml);
 
-            notifier.ReceivedWithAnyArgs().SendMessage(null);
+            notifier.ReceivedWithAnyArgs().SendCheckinNotification(null);
         }
 
         private string GenerateValidCheckinEvent()
