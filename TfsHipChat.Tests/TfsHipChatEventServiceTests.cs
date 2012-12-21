@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Collections;
 using TfsHipChat.Events;
+using System.Xml;
 
 namespace TfsHipChat.Tests
 {
@@ -24,7 +25,20 @@ namespace TfsHipChat.Tests
             var eventService = new TfsHipChatEventService(notifier);
             const string eventXml = "invalid_xml";
 
-            Assert.Throws<NotSupportedException>(() => {
+            Assert.Throws<XmlException>(() => {
+                eventService.Notify(eventXml, _tfsIdentityXml);
+            });
+        }
+
+        [Fact]
+        public void Notify_ShouldThrowException_WhenUnsupportedEvent()
+        {
+            var notifier = Substitute.For<INotifier>();
+            var eventService = new TfsHipChatEventService(notifier);
+            const string eventXml = "<EventThatDoesNotExist></EventThatDoesNotExist>";
+
+            Assert.Throws<NotSupportedException>(() =>
+            {
                 eventService.Notify(eventXml, _tfsIdentityXml);
             });
         }

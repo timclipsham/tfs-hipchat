@@ -3,6 +3,7 @@ using System.Xml.Serialization;
 using Microsoft.TeamFoundation.VersionControl.Common;
 using TfsHipChat.Events;
 using System;
+using System.Xml.Linq;
 
 namespace TfsHipChat
 {
@@ -22,54 +23,35 @@ namespace TfsHipChat
 
         public void Notify(string eventXml, string tfsIdentityXml)
         {
-            var serializer = new XmlSerializer(typeof(CheckinEvent));
+            var xml = XElement.Parse(eventXml);
 
-            using (var reader = new StringReader(eventXml))
+            switch (xml.Name.LocalName)
             {
-                CheckinEvent checkinEvent = null;
-
-                try
-                {
-                    checkinEvent = serializer.Deserialize(reader) as CheckinEvent;
-                }
-                catch (InvalidOperationException)
-                {
-                }
-
-                if (checkinEvent != null)
-                {
+                case "CheckinEvent":
+                    var checkinEvent = DeserializeXmlToType<CheckinEvent>(eventXml);
                     _notifier.SendCheckinNotification(checkinEvent);
-                    return;
-                }
-            }
+                    break;
 
-            serializer = new XmlSerializer(typeof(BuildCompletionEvent));
-
-            using (var reader = new StringReader(eventXml))
-            {
-
-                BuildCompletionEvent buildCompletionEvent = null;
-
-                try
-                {
-                    buildCompletionEvent = serializer.Deserialize(reader) as BuildCompletionEvent;
-                }
-                catch (InvalidOperationException)
-                {
-                }
-
-                if (buildCompletionEvent != null)
-                {
+                case "BuildCompletionEvent":
+                    var buildCompletionEvent = DeserializeXmlToType<BuildCompletionEvent>(eventXml);
                     if (buildCompletionEvent.CompletionStatus != "Successfully Completed")
                     {
                         _notifier.SendBuildCompletionFailedNotification(buildCompletionEvent);
                     }
-                    
-                    return;
-                }
-            }
+                    break;
 
-            throw new NotSupportedException("The event received is not supported.");
+                default:
+                    throw new NotSupportedException("The event received is not supported.");
+            }
+        }
+
+        private T DeserializeXmlToType<T>(string eventXml) where T : class {
+            var serializer = new XmlSerializer(typeof(T));
+
+            using (var reader = new StringReader(eventXml))
+            {
+                return serializer.Deserialize(reader) as T;
+            }
         }
     }
 }
