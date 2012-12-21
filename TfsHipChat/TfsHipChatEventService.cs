@@ -9,7 +9,7 @@ namespace TfsHipChat
 {
     public class TfsHipChatEventService : IEventService
     {
-        private INotifier _notifier;
+        private readonly INotifier _notifier;
 
         // TODO: replace poor man's IoC with a full solution
         public TfsHipChatEventService() : this(new HipChatNotifier())
@@ -18,7 +18,7 @@ namespace TfsHipChat
 
         public TfsHipChatEventService(INotifier notifier)
         {
-            this._notifier = notifier;
+            _notifier = notifier;
         }
 
         public void Notify(string eventXml, string tfsIdentityXml)

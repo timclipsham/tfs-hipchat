@@ -1,19 +1,14 @@
 ﻿using HipChat;
 using Microsoft.TeamFoundation.VersionControl.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using TfsHipChat.Events;
 
 namespace TfsHipChat
 {
     public class HipChatNotifier : INotifier
     {
-        private HipChatClient _hipChatClient;
-        private string _tfsServerUrl;
+        private readonly HipChatClient _hipChatClient;
+        private readonly string _tfsServerUrl;
 
         public HipChatNotifier()
         {

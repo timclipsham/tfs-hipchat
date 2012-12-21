@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NSubstitute;
 using Xunit;
 using Microsoft.TeamFoundation.VersionControl.Common;
@@ -16,7 +12,7 @@ namespace TfsHipChat.Tests
 {
     public class TfsHipChatEventServiceTests
     {
-        private const string _tfsIdentityXml = "";
+        private const string TfsIdentityXml = "";
 
         [Fact]
         public void Notify_ShouldThrowException_WhenInvalidXmlData()
@@ -25,9 +21,7 @@ namespace TfsHipChat.Tests
             var eventService = new TfsHipChatEventService(notifier);
             const string eventXml = "invalid_xml";
 
-            Assert.Throws<XmlException>(() => {
-                eventService.Notify(eventXml, _tfsIdentityXml);
-            });
+            Assert.Throws<XmlException>(() => eventService.Notify(eventXml, TfsIdentityXml));
         }
 
         [Fact]
@@ -37,10 +31,7 @@ namespace TfsHipChat.Tests
             var eventService = new TfsHipChatEventService(notifier);
             const string eventXml = "<EventThatDoesNotExist></EventThatDoesNotExist>";
 
-            Assert.Throws<NotSupportedException>(() =>
-            {
-                eventService.Notify(eventXml, _tfsIdentityXml);
-            });
+            Assert.Throws<NotSupportedException>(() => eventService.Notify(eventXml, TfsIdentityXml));
         }
 
         [Fact]
@@ -50,7 +41,7 @@ namespace TfsHipChat.Tests
             var eventService = new TfsHipChatEventService(notifier);
             string eventXml = CreateCheckinEvent();
 
-            eventService.Notify(eventXml, _tfsIdentityXml);
+            eventService.Notify(eventXml, TfsIdentityXml);
 
             notifier.ReceivedWithAnyArgs().SendCheckinNotification(null);
         }
@@ -62,7 +53,7 @@ namespace TfsHipChat.Tests
             var eventService = new TfsHipChatEventService(notifier);
             string eventXml = CreateFailedBuildCompletion();
 
-            eventService.Notify(eventXml, _tfsIdentityXml);
+            eventService.Notify(eventXml, TfsIdentityXml);
 
             notifier.ReceivedWithAnyArgs().SendBuildCompletionFailedNotification(null);
         }
@@ -74,15 +65,17 @@ namespace TfsHipChat.Tests
             var eventService = new TfsHipChatEventService(notifier);
             string eventXml = CreateSuccessfulBuildCompletion();
 
-            eventService.Notify(eventXml, _tfsIdentityXml);
+            eventService.Notify(eventXml, TfsIdentityXml);
 
             notifier.DidNotReceiveWithAnyArgs().SendBuildCompletionFailedNotification(null);
         }
 
         private string CreateCheckinEvent()
         {
-            var checkinEvent = new CheckinEvent(1000, new DateTime(), "owner", "commiter", "some comment");
-            checkinEvent.Artifacts = new ArrayList();  // serialization fails without this
+            var checkinEvent = new CheckinEvent(1000, new DateTime(), "owner", "commiter", "some comment")
+                                   {
+                                       Artifacts = new ArrayList() // serialization fails without this
+                                   };
 
             var serializer = new XmlSerializer(typeof(CheckinEvent));
             var sw = new StringWriter();
@@ -93,9 +86,7 @@ namespace TfsHipChat.Tests
 
         private string CreateSuccessfulBuildCompletion()
         {
-            var buildEvent = new BuildCompletionEvent();
-            buildEvent.CompletionStatus = "Successfully Completed";
-            
+            var buildEvent = new BuildCompletionEvent { CompletionStatus = "Successfully Completed" };
             var serializer = new XmlSerializer(typeof(BuildCompletionEvent));
             var sw = new StringWriter();
             serializer.Serialize(sw, buildEvent);

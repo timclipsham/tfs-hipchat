@@ -7,139 +7,137 @@ using System.Xml.Serialization;
 namespace TfsHipChat.Events
 {
     /// <summary>
-    /// Event raised when a Build Completes
+    /// Event raised when a build completes
     /// </summary>
     [GeneratedCodeAttribute("xsd", "2.0.50727.42")]
-    [SerializableAttribute()]
-    [DebuggerStepThroughAttribute()]
+    [SerializableAttribute]
+    [DebuggerStepThroughAttribute]
     [DesignerCategoryAttribute("code")]
     [XmlRootAttribute(Namespace = "", IsNullable = false)]
-    public partial class BuildCompletionEvent
+    public class BuildCompletionEvent
     {
-        #region Fields
-        private string teamFoundationServerUrl;
-        private string teamProject;
-        private string id;
-        private string url;
-        private string type;
-        private string title;
-        private string completionStatus;
-        private string subscriber;
-        private string configuration;
-        private string requestedBy;
-        private string timeZone;
-        private string timeZoneOffset;
-        private string buildStartTime;
-        private string buildCompleteTime;
-        private string buildMachine;
-        #endregion
+        private string _teamFoundationServerUrl;
+        private string _teamProject;
+        private string _id;
+        private string _url;
+        private string _type;
+        private string _title;
+        private string _completionStatus;
+        private string _subscriber;
+        private string _configuration;
+        private string _requestedBy;
+        private string _timeZone;
+        private string _timeZoneOffset;
+        private string _buildStartTime;
+        private string _buildCompleteTime;
+        private string _buildMachine;
 
         #region Public Properties
         /// <remarks/>
         [XmlElementAttribute(DataType = "anyURI")]
         public string TeamFoundationServerUrl
         {
-            get { return this.teamFoundationServerUrl; }
-            set { this.teamFoundationServerUrl = value; }
+            get { return _teamFoundationServerUrl; }
+            set { _teamFoundationServerUrl = value; }
         }
 
         /// <remarks/>
         public string TeamProject
         {
-            get { return this.teamProject; }
-            set { this.teamProject = value; }
+            get { return _teamProject; }
+            set { _teamProject = value; }
         }
 
         /// <remarks/>
         public string Id
         {
-            get { return this.id; }
-            set { this.id = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         /// <remarks/>
         [XmlElementAttribute(DataType = "anyURI")]
         public string Url
         {
-            get { return this.url; }
-            set { this.url = value; }
+            get { return _url; }
+            set { _url = value; }
         }
 
         /// <remarks/>
         public string Type
         {
-            get { return this.type; }
-            set { this.type = value; }
+            get { return _type; }
+            set { _type = value; }
         }
 
         /// <remarks/>
         public string Title
         {
-            get { return this.title; }
-            set { this.title = value; }
+            get { return _title; }
+            set { _title = value; }
         }
 
         /// <remarks/>
         public string CompletionStatus
         {
-            get { return this.completionStatus; }
-            set { this.completionStatus = value; }
+            get { return _completionStatus; }
+            set { _completionStatus = value; }
         }
 
         /// <remarks/>
         public string Subscriber
         {
-            get { return this.subscriber; }
-            set { this.subscriber = value; }
+            get { return _subscriber; }
+            set { _subscriber = value; }
         }
 
         /// <remarks/>
         public string Configuration
         {
-            get { return this.configuration; }
-            set { this.configuration = value; }
+            get { return _configuration; }
+            set { _configuration = value; }
         }
 
         /// <remarks/>
         public string RequestedBy
         {
-            get { return this.requestedBy; }
-            set { this.requestedBy = value; }
+            get { return _requestedBy; }
+            set { _requestedBy = value; }
         }
 
         /// <remarks/>
         public string TimeZone
         {
-            get { return this.timeZone; }
-            set { this.timeZone = value; }
+            get { return _timeZone; }
+            set { _timeZone = value; }
         }
 
         /// <remarks/>
         public string TimeZoneOffset
         {
-            get { return this.timeZoneOffset; }
-            set { this.timeZoneOffset = value; }
+            get { return _timeZoneOffset; }
+            set { _timeZoneOffset = value; }
         }
 
         /// <remarks/>
         public string BuildStartTime
         {
-            get { return this.buildStartTime; }
-            set { this.buildStartTime = value; }
+            get { return _buildStartTime; }
+            set { _buildStartTime = value; }
         }
 
         /// <remarks/>
         public string BuildCompleteTime
         {
-            get { return this.buildCompleteTime; }
-            set { this.buildCompleteTime = value; }
+            get { return _buildCompleteTime; }
+            set { _buildCompleteTime = value; }
         }
 
         /// <remarks/>
         public string BuildMachine
         {
-            get { return this.buildMachine; }
-            set { this.buildMachine = value; }
+            get { return _buildMachine; }
+            set { _buildMachine = value; }
         }
         #endregion
     }
