@@ -6,7 +6,7 @@ namespace TfsHipChat.Tests
     public class TfsIdentityTests
     {
         [Fact]
-        public void Url_ShouldReturnTheServerUrl_WhenDeserializedByValidXml()
+        public void Url_ShouldReturnTheServerUrl_WhenDeserializedUsingValidXml()
         {
             const string serverUrl = "http://some-tfs-server.com";
             const string tfsIdentityXml = "<TeamFoundationServer url=\"" + serverUrl + "\" />";
