@@ -2,7 +2,7 @@
 using TfsHipChat.Tfs;
 using Xunit;
 
-namespace TfsHipChat.Tests
+namespace TfsHipChat.Tests.Tfs
 {
     public class TfsIdentityTests
     {

@@ -3,7 +3,7 @@ using Microsoft.TeamFoundation.VersionControl.Common;
 using TfsHipChat.Tfs.Events;
 using Xunit;
 
-namespace TfsHipChat.Tests.Events
+namespace TfsHipChat.Tests.Tfs.Events
 {
     public class CheckinEventExtensionsTests
     {
