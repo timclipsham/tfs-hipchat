@@ -17,7 +17,8 @@ namespace TfsHipChat
             var commonString = versionedItems.First().ServerItem.Substring(0, commonLength);
             var lastSlashIndex = commonString.LastIndexOf('/');
             
-            return (lastSlashIndex > 0) ? commonString.Substring(0, lastSlashIndex) + "/..." : "";
+            // prevents rendering half a file/directory name or just the root tfs path "$/"
+            return (lastSlashIndex > 1) ? commonString.Substring(0, lastSlashIndex) + "/..." : "";
         }
 
         private static int GetCommonPathLength(ICollection<ClientArtifact> versionedItems)
