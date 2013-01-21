@@ -8,15 +8,13 @@ namespace TfsHipChat
     {
         public static string GetCommonPath(ICollection<ClientArtifact> versionedItems)
         {
-            if (versionedItems.Count == 1)
-            {
-                return versionedItems.First().ServerItem;
-            }
+            if (versionedItems.Count == 0) { return ""; }
+            if (versionedItems.Count == 1) { return versionedItems.First().ServerItem; }
 
             var commonLength = GetCommonPathLength(versionedItems);
             var commonString = versionedItems.First().ServerItem.Substring(0, commonLength);
             var lastSlashIndex = commonString.LastIndexOf('/');
-            
+
             // prevents rendering half a file/directory name or just the root tfs path "$/"
             return (lastSlashIndex > 1) ? commonString.Substring(0, lastSlashIndex) + "/..." : "";
         }
@@ -37,7 +35,7 @@ namespace TfsHipChat
                         stillCommon = false;
                         break;
                     }
-                    
+
                     if (!currentChar.HasValue)
                     {
                         currentChar = path[commonPosition];

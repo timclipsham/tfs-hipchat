@@ -73,6 +73,16 @@ namespace TfsHipChat.Tests
             Assert.Equal("", commonPath);
         }
 
+        [Fact]
+        public void GetCommonPath_ShouldReturnEmptyString_WhenEmptyCollection()
+        {
+            var versionedItems = new List<ClientArtifact>();
+
+            var commonPath = VersionedItemAnalyzer.GetCommonPath(versionedItems);
+
+            Assert.Equal("", commonPath);
+        }
+
         private static ClientArtifact CreateVersionedItem(string serverItem)
         {
             return new ClientArtifact
