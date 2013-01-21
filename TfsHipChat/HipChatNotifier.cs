@@ -25,8 +25,10 @@ namespace TfsHipChat
         public void SendCheckinNotification(CheckinEvent checkinEvent)
         {
             var changesetUrl = BuildChangesetUrl(checkinEvent.Number);
-            var message = string.Format("{0} checked in changeset <a href=\"{1}\">{2}</a><br>{3}",
-                checkinEvent.CommitterDisplay, changesetUrl, checkinEvent.Number, checkinEvent.Comment);
+            var commonPath = VersionedItemAnalyzer.GetCommonPath(checkinEvent.GetVersionedItems());
+            var message = string.Format("{0} checked in changeset <a href=\"{1}\">{2}</a> ({3})<br>{4}",
+                checkinEvent.CommitterDisplay, changesetUrl, checkinEvent.Number, commonPath,
+                checkinEvent.Comment);
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.yellow);
         }
 
