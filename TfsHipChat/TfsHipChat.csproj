@@ -65,6 +65,7 @@
     </Compile>
     <Compile Include="TfsHipChatEventService.cs" />
     <Compile Include="Tfs\TfsIdentity.cs" />
+    <Compile Include="VersionedItemAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
