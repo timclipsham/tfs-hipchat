@@ -1,5 +1,4 @@
 ﻿using HipChat;
-using System.Text.RegularExpressions;
 using Microsoft.TeamFoundation.VersionControl.Common;
 using TfsHipChat.Tfs.Events;
 
@@ -8,7 +7,6 @@ namespace TfsHipChat
     public class HipChatNotifier : INotifier
     {
         private readonly HipChatClient _hipChatClient;
-        private readonly string _tfsServerUrl;
 
         public HipChatNotifier()
         {
@@ -18,8 +16,6 @@ namespace TfsHipChat
                 RoomId = Properties.Settings.Default.HipChat_RoomId,
                 From = Properties.Settings.Default.HipChat_From
             };
-
-            _tfsServerUrl = Regex.Replace(Properties.Settings.Default.TfsServerUrl, "[\\/]+$", "") + "/";
         }
 
         public void SendCheckinNotification(CheckinEvent checkinEvent)
