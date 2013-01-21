@@ -31,6 +31,20 @@ namespace TfsHipChat.Tests
             Assert.Equal("$/SomeTeamProject/TfsPathTo/...", commonPath);
         }
 
+        [Fact]
+        public void GetCommonPath_ShouldReturnCommonPath_WhenGivenOnePathContainedWithinAnother()
+        {
+            var versionedItems = new List<ClientArtifact>
+                                     {
+                                         CreateVersionedItem("$/SomeTeamProject/TfsPathTo/MyFirstFile.c"),
+                                         CreateVersionedItem("$/SomeTeamProject/TfsPathTo/MyFirstFile.cpp")
+                                     };
+
+            var commonPath = VersionedItemAnalyzer.GetCommonPath(versionedItems);
+
+            Assert.Equal("$/SomeTeamProject/TfsPathTo/...", commonPath);
+        }
+
         private static ClientArtifact CreateVersionedItem(string serverItem)
         {
             return new ClientArtifact

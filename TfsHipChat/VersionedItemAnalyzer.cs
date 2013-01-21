@@ -13,38 +13,38 @@ namespace TfsHipChat
                 return versionedItems.First().ServerItem;
             }
 
-            var commonLength = GetCommonStringLength(versionedItems);
+            var commonLength = GetCommonPathLength(versionedItems);
             var commonString = versionedItems.First().ServerItem.Substring(0, commonLength);
             var commonPath = commonString.Substring(0, commonString.LastIndexOf('/')) + "/...";
             return commonPath;
         }
 
-        private static int GetCommonStringLength(ICollection<ClientArtifact> versionedItems)
+        private static int GetCommonPathLength(ICollection<ClientArtifact> versionedItems)
         {
-            var commonLength = 0;
+            var commonPosition = 0;
             var stillCommon = true;
 
             while (stillCommon)
             {
                 char? currentChar = null;
-                var currentPosition = commonLength;
 
-                foreach (var versionedItem in versionedItems)
+                foreach (var path in versionedItems.Select(versionedItem => versionedItem.ServerItem))
                 {
-                    if (!currentChar.HasValue)
-                    {
-                        currentChar = versionedItem.ServerItem[currentPosition];
-                    }
-                    else if (currentChar != versionedItem.ServerItem[currentPosition])
+                    if (commonPosition >= path.Length || (currentChar.HasValue && currentChar != path[commonPosition]))
                     {
                         stillCommon = false;
                         break;
                     }
+                    
+                    if (!currentChar.HasValue)
+                    {
+                        currentChar = path[commonPosition];
+                    }
                 }
 
-                if (stillCommon) commonLength++;
+                if (stillCommon) { commonPosition++; }
             }
-            return commonLength;
+            return commonPosition;
         }
     }
 }
