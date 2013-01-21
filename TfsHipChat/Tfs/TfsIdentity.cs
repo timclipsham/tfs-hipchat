@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace TfsHipChat
+namespace TfsHipChat.Tfs
 {
     /// <summary>
     /// Holds information about the server which raised an event

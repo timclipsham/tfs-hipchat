@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using TfsHipChat.Tfs;
 using Xunit;
 
 namespace TfsHipChat.Tests
@@ -19,7 +20,7 @@ namespace TfsHipChat.Tests
                 if (tfsIdentity != null) url = tfsIdentity.Url;
             }
 
-            Assert.Equal(url, serverUrl);
+            Assert.Equal(serverUrl, url);
         }
     }
 }
