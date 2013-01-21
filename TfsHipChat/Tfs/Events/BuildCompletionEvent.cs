@@ -4,16 +4,16 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml.Serialization;
 
-namespace TfsHipChat.Events
+namespace TfsHipChat.Tfs.Events
 {
     /// <summary>
     /// Event raised when a build completes
     /// </summary>
-    [GeneratedCodeAttribute("xsd", "2.0.50727.42")]
-    [SerializableAttribute]
-    [DebuggerStepThroughAttribute]
-    [DesignerCategoryAttribute("code")]
-    [XmlRootAttribute(Namespace = "", IsNullable = false)]
+    [GeneratedCode("xsd", "2.0.50727.42")]
+    [Serializable]
+    [DebuggerStepThrough]
+    [DesignerCategory("code")]
+    [XmlRoot(Namespace = "", IsNullable = false)]
     public class BuildCompletionEvent
     {
         private string _teamFoundationServerUrl;
@@ -34,7 +34,7 @@ namespace TfsHipChat.Events
 
         #region Public Properties
         /// <remarks/>
-        [XmlElementAttribute(DataType = "anyURI")]
+        [XmlElement(DataType = "anyURI")]
         public string TeamFoundationServerUrl
         {
             get { return _teamFoundationServerUrl; }
@@ -56,7 +56,7 @@ namespace TfsHipChat.Events
         }
 
         /// <remarks/>
-        [XmlElementAttribute(DataType = "anyURI")]
+        [XmlElement(DataType = "anyURI")]
         public string Url
         {
             get { return _url; }

@@ -1,11 +1,11 @@
 ﻿using System;
 using NSubstitute;
+using TfsHipChat.Tfs.Events;
 using Xunit;
 using Microsoft.TeamFoundation.VersionControl.Common;
 using System.Xml.Serialization;
 using System.IO;
 using System.Collections;
-using TfsHipChat.Events;
 using System.Xml;
 
 namespace TfsHipChat.Tests

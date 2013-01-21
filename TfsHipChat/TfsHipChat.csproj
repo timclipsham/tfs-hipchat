@@ -51,7 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\BuildCompletionEvent.cs" />
+    <Compile Include="Tfs\Events\BuildCompletionEvent.cs" />
+    <Compile Include="Tfs\Events\CheckinEventExtensions.cs" />
     <Compile Include="HipChatNotifier.cs" />
     <Compile Include="IEventService.cs" />
     <Compile Include="INotifier.cs" />

@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 using Microsoft.TeamFoundation.VersionControl.Common;
-using TfsHipChat.Events;
 using System;
 using System.Xml.Linq;
+using TfsHipChat.Tfs.Events;
 
 namespace TfsHipChat
 {

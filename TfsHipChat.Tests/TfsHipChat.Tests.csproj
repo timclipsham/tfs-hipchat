@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\CheckinEventExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TfsHipChatEventServiceTests.cs" />
     <Compile Include="TfsIdentityTests.cs" />

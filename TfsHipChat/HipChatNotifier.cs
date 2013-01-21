@@ -1,7 +1,7 @@
 ﻿using HipChat;
-using Microsoft.TeamFoundation.VersionControl.Common;
 using System.Text.RegularExpressions;
-using TfsHipChat.Events;
+using Microsoft.TeamFoundation.VersionControl.Common;
+using TfsHipChat.Tfs.Events;
 
 namespace TfsHipChat
 {
