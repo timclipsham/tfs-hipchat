@@ -45,6 +45,20 @@ namespace TfsHipChat.Tests
             Assert.Equal("$/SomeTeamProject/TfsPathTo/...", commonPath);
         }
 
+        [Fact]
+        public void GetCommonPath_ShouldReturnEmptyString_WhenNoCommonPath()
+        {
+            var versionedItems = new List<ClientArtifact>
+                                     {
+                                         CreateVersionedItem("abc/def.cs"),
+                                         CreateVersionedItem("def/abc.cs")
+                                     };
+
+            var commonPath = VersionedItemAnalyzer.GetCommonPath(versionedItems);
+
+            Assert.Equal("", commonPath);
+        }
+
         private static ClientArtifact CreateVersionedItem(string serverItem)
         {
             return new ClientArtifact

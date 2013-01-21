@@ -15,8 +15,9 @@ namespace TfsHipChat
 
             var commonLength = GetCommonPathLength(versionedItems);
             var commonString = versionedItems.First().ServerItem.Substring(0, commonLength);
-            var commonPath = commonString.Substring(0, commonString.LastIndexOf('/')) + "/...";
-            return commonPath;
+            var lastSlashIndex = commonString.LastIndexOf('/');
+            
+            return (lastSlashIndex > 0) ? commonString.Substring(0, lastSlashIndex) + "/..." : "";
         }
 
         private static int GetCommonPathLength(ICollection<ClientArtifact> versionedItems)
