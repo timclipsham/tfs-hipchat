@@ -6,6 +6,6 @@ namespace TfsHipChat
     public interface INotifier
     {
         void SendCheckinNotification(CheckinEvent checkinEvent);
-        void SendBuildCompletionFailedNotification(BuildCompletionEvent buildCompletionEvent);
+        void SendBuildCompletionFailedNotification(BuildCompletionEvent buildEvent);
     }
 }

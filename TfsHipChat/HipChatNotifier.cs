@@ -21,13 +21,18 @@ namespace TfsHipChat
         public void SendCheckinNotification(CheckinEvent checkinEvent)
         {
             var message = string.Format("{0} checked in changeset <a href=\"{1}\">{2}</a><br>{3}",
-                checkinEvent.CommitterDisplay, checkinEvent.GetChangesetUrl(), checkinEvent.Number, checkinEvent.Comment);
+                checkinEvent.CommitterDisplay, checkinEvent.GetChangesetUrl(), checkinEvent.Number,
+                checkinEvent.Comment);
+
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.yellow);
         }
 
-        public void SendBuildCompletionFailedNotification(BuildCompletionEvent buildCompletionEvent)
+        public void SendBuildCompletionFailedNotification(BuildCompletionEvent buildEvent)
         {
-            var message = string.Format("{0} (requested by {1})", buildCompletionEvent.Title, buildCompletionEvent.RequestedBy);
+            var message = string.Format("{0} build <a href=\"{1}\">{2}</a> {3} (requested by {4})",
+                buildEvent.TeamProject, buildEvent.Url, buildEvent.Id, buildEvent.CompletionStatus,
+                buildEvent.RequestedBy);
+
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.red);
         }
     }
