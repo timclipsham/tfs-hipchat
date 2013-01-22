@@ -8,8 +8,7 @@ Send Team Foundation Server event notifications to HipChat.
 2. Edit the app.config and specify your:
  * HipChat API token
  * HipChat Room ID
- * TFS server URL including the collection (e.g. http://sometfsserver/tfs/MyCollection)
-3. Run the executable somewhere your TFS server can access it (by default it hosts the service at http://localhost:8731/TfsHipChat)
+3. Run the executable somewhere your TFS server can access (by default it hosts the service at http://localhost:8731/TfsHipChat)
 4. Configure your TFS instance to push notifications to it for the desired events (NOTE: admin access to TFS is required)
 
 ### How to: Configure your TFS instance
