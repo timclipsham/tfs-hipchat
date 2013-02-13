@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NSubstitute;
 using TfsHipChat.Tfs.Events;
 using Xunit;
@@ -17,8 +18,8 @@ namespace TfsHipChat.Tests
         [Fact]
         public void Notify_ShouldThrowException_WhenInvalidXmlData()
         {
-            var notifier = Substitute.For<INotifier>();
-            var eventService = new TfsHipChatEventService(notifier);
+            var notifierMap = Substitute.For<IDictionary<string, INotifier>>();
+            var eventService = new TfsHipChatEventService(notifierMap);
             const string eventXml = "invalid_xml";
 
             Assert.Throws<XmlException>(() => eventService.Notify(eventXml, TfsIdentityXml));
@@ -27,8 +28,8 @@ namespace TfsHipChat.Tests
         [Fact]
         public void Notify_ShouldThrowException_WhenUnsupportedEvent()
         {
-            var notifier = Substitute.For<INotifier>();
-            var eventService = new TfsHipChatEventService(notifier);
+            var notifierMap = Substitute.For<IDictionary<string, INotifier>>();
+            var eventService = new TfsHipChatEventService(notifierMap);
             const string eventXml = "<EventThatDoesNotExist></EventThatDoesNotExist>";
 
             Assert.Throws<NotSupportedException>(() => eventService.Notify(eventXml, TfsIdentityXml));
@@ -38,8 +39,9 @@ namespace TfsHipChat.Tests
         public void Notify_ShouldSendCheckinNotification_WhenCheckinEvent()
         {
             var notifier = Substitute.For<INotifier>();
-            var eventService = new TfsHipChatEventService(notifier);
-            string eventXml = CreateCheckinEvent();
+            var notifierMap = new Dictionary<string, INotifier> {{"testproject", notifier}};
+            var eventService = new TfsHipChatEventService(notifierMap);
+            var eventXml = CreateCheckinEvent();
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
@@ -50,8 +52,9 @@ namespace TfsHipChat.Tests
         public void Notify_ShouldSendBuildCompletionFailedNotification_WhenBuildIsBroken()
         {
             var notifier = Substitute.For<INotifier>();
-            var eventService = new TfsHipChatEventService(notifier);
-            string eventXml = CreateFailedBuildCompletion();
+            var notifierMap = new Dictionary<string, INotifier> { { "testproject", notifier } };
+            var eventService = new TfsHipChatEventService(notifierMap);
+            var eventXml = CreateFailedBuildCompletion();
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
@@ -59,21 +62,49 @@ namespace TfsHipChat.Tests
         }
 
         [Fact]
+        public void Notify_ShouldSendBuildCompletionSuccessNotification_WhenBuildIsSuccessful()
+        {
+            var notifier = Substitute.For<INotifier>();
+            var notifierMap = new Dictionary<string, INotifier> { { "testproject", notifier } };
+            var eventService = new TfsHipChatEventService(notifierMap);
+            var eventXml = CreateSuccessfulBuildCompletion();
+
+            eventService.Notify(eventXml, TfsIdentityXml);
+
+            notifier.ReceivedWithAnyArgs().SendBuildCompletionSuccessNotification(null);
+        }
+
+        [Fact]
         public void Notify_ShouldNotSendBuildCompletionFailedNotification_WhenBuildIsSuccessful()
         {
             var notifier = Substitute.For<INotifier>();
-            var eventService = new TfsHipChatEventService(notifier);
-            string eventXml = CreateSuccessfulBuildCompletion();
+            var notifierMap = new Dictionary<string, INotifier> { { "testproject", notifier } };
+            var eventService = new TfsHipChatEventService(notifierMap);
+            var eventXml = CreateSuccessfulBuildCompletion();
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
             notifier.DidNotReceiveWithAnyArgs().SendBuildCompletionFailedNotification(null);
         }
 
+        [Fact]
+        public void Notify_ShouldNotSendBuildCompletionSuccessNotification_WhenBuildIsFailed()
+        {
+            var notifier = Substitute.For<INotifier>();
+            var notifierMap = new Dictionary<string, INotifier> { { "testproject", notifier } };
+            var eventService = new TfsHipChatEventService(notifierMap);
+            var eventXml = CreateFailedBuildCompletion();
+
+            eventService.Notify(eventXml, TfsIdentityXml);
+
+            notifier.DidNotReceiveWithAnyArgs().SendBuildCompletionSuccessNotification(null);
+        }
+
         private string CreateCheckinEvent()
         {
             var checkinEvent = new CheckinEvent(1000, new DateTime(), "owner", "commiter", "some comment")
                                    {
+                                       TeamProject = "TestProject",
                                        Artifacts = new ArrayList() // serialization fails without this
                                    };
 
@@ -86,7 +117,8 @@ namespace TfsHipChat.Tests
 
         private string CreateSuccessfulBuildCompletion()
         {
-            var buildEvent = new BuildCompletionEvent { CompletionStatus = "Successfully Completed" };
+            var buildEvent = new BuildCompletionEvent {CompletionStatus = "Successfully Completed", TeamProject = "TestProject"};
+
             var serializer = new XmlSerializer(typeof(BuildCompletionEvent));
             var sw = new StringWriter();
             serializer.Serialize(sw, buildEvent);
@@ -96,7 +128,7 @@ namespace TfsHipChat.Tests
 
         private string CreateFailedBuildCompletion()
         {
-            var buildEvent = new BuildCompletionEvent();
+            var buildEvent = new BuildCompletionEvent {TeamProject = "TestProject"};
 
             var serializer = new XmlSerializer(typeof(BuildCompletionEvent));
             var sw = new StringWriter();

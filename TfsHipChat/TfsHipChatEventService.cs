@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using Microsoft.TeamFoundation.VersionControl.Common;
 using System;
@@ -9,18 +12,19 @@ namespace TfsHipChat
 {
     public class TfsHipChatEventService : IEventService
     {
-        private readonly INotifier _notifier;
+        private readonly IDictionary<string, INotifier> _projectMap;
 
         // TODO: replace poor man's IoC with a full solution
-        public TfsHipChatEventService() : this(new HipChatNotifier())
+        public TfsHipChatEventService()
         {
+            _projectMap = Properties.Settings.Default.ProjectRoomMap.OfType<string>().Select(x => x.Split('|')).ToDictionary(x => x[0].ToLower(), x => (INotifier)new HipChatNotifier(Convert.ToInt32(x[1])));
         }
 
-        public TfsHipChatEventService(INotifier notifier)
+        public TfsHipChatEventService(IDictionary<string, INotifier> projectMap)
         {
-            _notifier = notifier;
+            _projectMap = projectMap;
         }
-
+        
         public void Notify(string eventXml, string tfsIdentityXml)
         {
             var xml = XElement.Parse(eventXml);
@@ -28,18 +32,39 @@ namespace TfsHipChat
             switch (xml.Name.LocalName)
             {
                 case "CheckinEvent":
-                    var checkinEvent = DeserializeXmlToType<CheckinEvent>(eventXml);
-                    _notifier.SendCheckinNotification(checkinEvent);
-                    break;
-
-                case "BuildCompletionEvent":
-                    var buildCompletionEvent = DeserializeXmlToType<BuildCompletionEvent>(eventXml);
-                    if (buildCompletionEvent.CompletionStatus != "Successfully Completed")
                     {
-                        _notifier.SendBuildCompletionFailedNotification(buildCompletionEvent);
-                    }
-                    break;
+                        var checkinEvent = DeserializeXmlToType<CheckinEvent>(eventXml);
+                        var teamproject = checkinEvent.TeamProject.ToLower();
+                        INotifier notifier;
 
+                        if (_projectMap.TryGetValue(teamproject, out notifier))
+                        {
+                            notifier.SendCheckinNotification(checkinEvent);
+                        }
+
+                        break;
+                    }
+                case "BuildCompletionEvent":
+                    {
+                        var buildCompletionEvent = DeserializeXmlToType<BuildCompletionEvent>(eventXml);
+                        var teamproject = buildCompletionEvent.TeamProject.ToLower();
+                        INotifier notifier;
+
+                        if (!_projectMap.TryGetValue(teamproject, out notifier))
+                        {
+                            return;
+                        }
+
+                        if (buildCompletionEvent.CompletionStatus == "Successfully Completed")
+                        {
+                            notifier.SendBuildCompletionSuccessNotification(buildCompletionEvent);
+                        }
+                        else
+                        {
+                            notifier.SendBuildCompletionFailedNotification(buildCompletionEvent);
+                        }
+                        break;
+                    }
                 default:
                     throw new NotSupportedException("The event received is not supported.");
             }

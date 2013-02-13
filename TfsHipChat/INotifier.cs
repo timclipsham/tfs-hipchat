@@ -7,5 +7,6 @@ namespace TfsHipChat
     {
         void SendCheckinNotification(CheckinEvent checkinEvent);
         void SendBuildCompletionFailedNotification(BuildCompletionEvent buildCompletionEvent);
+        void SendBuildCompletionSuccessNotification(BuildCompletionEvent buildCompletionEvent);
     }
 }
