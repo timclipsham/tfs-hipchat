@@ -7,8 +7,7 @@ namespace TfsHipChat.Tfs
     /// Holds information about the server which raised an event
     /// </summary>
     [Serializable]
-    [XmlType(AnonymousType = true)]
-    [XmlRoot(Namespace = "", IsNullable = false, ElementName = "TeamFoundationServer")]
+    [XmlRoot(Namespace = "", ElementName = "TeamFoundationServer")]
     public class TfsIdentity
     {
         [XmlAttribute("url")]
