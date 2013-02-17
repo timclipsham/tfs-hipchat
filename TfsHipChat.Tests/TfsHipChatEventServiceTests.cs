@@ -2,10 +2,8 @@
 using NSubstitute;
 using TfsHipChat.Tfs.Events;
 using Xunit;
-using Microsoft.TeamFoundation.VersionControl.Common;
 using System.Xml.Serialization;
 using System.IO;
-using System.Collections;
 using System.Xml;
 
 namespace TfsHipChat.Tests
@@ -72,11 +70,7 @@ namespace TfsHipChat.Tests
 
         private string CreateCheckinEvent()
         {
-            var checkinEvent = new CheckinEvent(1000, new DateTime(), "owner", "commiter", "some comment")
-                                   {
-                                       Artifacts = new ArrayList() // serialization fails without this
-                                   };
-
+            var checkinEvent = new CheckinEvent();
             var serializer = new XmlSerializer(typeof(CheckinEvent));
             var sw = new StringWriter();
             serializer.Serialize(sw, checkinEvent);

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Microsoft.TeamFoundation.VersionControl.Common;
+﻿using System.Collections.Generic;
 using TfsHipChat.Tfs.Events;
 using Xunit;
 
@@ -11,8 +10,8 @@ namespace TfsHipChat.Tests.Tfs.Events
         public void GetChangesetUrl_ShouldReturnChangesetUrl_WhenUrlExists()
         {
             const string checkinUrl = "http://some-tfs-server.com/path?query=0";
-            var checkinEvent = new CheckinEvent { Artifacts = new ArrayList() };
-            checkinEvent.Artifacts.Add(new ClientArtifact(checkinUrl, "Changeset"));
+            var checkinEvent = new CheckinEvent { Artifacts = new List<ClientArtifact>() };
+            checkinEvent.Artifacts.Add(new ClientArtifact { ArtifactType = "Changeset", Url = checkinUrl });
 
             var url = checkinEvent.GetChangesetUrl();
 
@@ -22,7 +21,7 @@ namespace TfsHipChat.Tests.Tfs.Events
         [Fact]
         public void GetChangesetUrl_ShouldReturnNull_WhenUrlDoesNotExist()
         {
-            var checkinEvent = new CheckinEvent { Artifacts = new ArrayList() };
+            var checkinEvent = new CheckinEvent { Artifacts = new List<ClientArtifact>() };
 
             var url = checkinEvent.GetChangesetUrl();
 
