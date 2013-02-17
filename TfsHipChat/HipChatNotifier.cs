@@ -1,5 +1,4 @@
 ﻿using HipChat;
-using Microsoft.TeamFoundation.VersionControl.Common;
 using TfsHipChat.Tfs.Events;
 
 namespace TfsHipChat
@@ -27,7 +26,7 @@ namespace TfsHipChat
 
         public void SendBuildCompletionFailedNotification(BuildCompletionEvent buildEvent)
         {
-            var message = string.Format("{0} (requested by {1}) Failed", buildCompletionEvent.Title, buildCompletionEvent.RequestedBy);
+            var message = string.Format("{0} (requested by {1}) Failed", buildEvent.Title, buildEvent.RequestedBy);
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.red);
         }
 

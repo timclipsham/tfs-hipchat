@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using Microsoft.TeamFoundation.VersionControl.Common;
 using System;
 using System.Xml.Linq;
 using TfsHipChat.Tfs.Events;

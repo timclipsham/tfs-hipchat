@@ -1,5 +1,4 @@
-﻿using Microsoft.TeamFoundation.VersionControl.Common;
-using System.Linq;
+﻿using System.Linq;
 
 namespace TfsHipChat.Tfs.Events
 {
@@ -8,7 +7,7 @@ namespace TfsHipChat.Tfs.Events
         public static string GetChangesetUrl(this CheckinEvent checkinEvent)
         {
             return (from ClientArtifact ca in checkinEvent.Artifacts
-                    where ca.Type == "Changeset"
+                    where ca.ArtifactType == "Changeset"
                     select ca.Url).FirstOrDefault();
         }
     }

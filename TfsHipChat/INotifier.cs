@@ -1,5 +1,4 @@
-﻿using Microsoft.TeamFoundation.VersionControl.Common;
-using TfsHipChat.Tfs.Events;
+﻿using TfsHipChat.Tfs.Events;
 
 namespace TfsHipChat
 {

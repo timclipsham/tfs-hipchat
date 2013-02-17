@@ -26,8 +26,6 @@ Event types currently supported:
  * CheckinEvent
  * BuildCompletionEvent
 
-NOTE: it has only been tested using TFS 2012 thus far. Links in HipChat messages will likely only work in TFS 2012 at this point.
-
 ## Contributions
 To put it simply, feel free to contribute. I'm keen to see it:
  * Be much simpler to configure and choose what events you care about; potentially even provide means to automatically wire and unwire it with TFS based on the desired events
