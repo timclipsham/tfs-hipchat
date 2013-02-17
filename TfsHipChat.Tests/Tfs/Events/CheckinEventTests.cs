@@ -4,7 +4,7 @@ using Xunit;
 
 namespace TfsHipChat.Tests.Tfs.Events
 {
-    public class CheckinEventExtensionsTests
+    public class CheckinEventTests
     {
         [Fact]
         public void GetChangesetUrl_ShouldReturnChangesetUrl_WhenUrlExists()

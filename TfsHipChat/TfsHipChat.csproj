@@ -61,7 +61,6 @@
     <Compile Include="TfsHipChatEventService.cs" />
     <Compile Include="Tfs\Events\BuildCompletionEvent.cs" />
     <Compile Include="Tfs\Events\CheckinEvent.cs" />
-    <Compile Include="Tfs\Events\CheckinEventExtensions.cs" />
     <Compile Include="Tfs\TfsIdentity.cs" />
   </ItemGroup>
   <ItemGroup>

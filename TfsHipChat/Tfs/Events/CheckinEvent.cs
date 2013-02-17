@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace TfsHipChat.Tfs.Events
@@ -39,6 +40,13 @@ namespace TfsHipChat.Tfs.Events
 
         //[XmlArray]
         //public ArrayList PolicyFailures { get; set; }
+
+        public string GetChangesetUrl()
+        {
+            return (from ClientArtifact ca in Artifacts
+                    where ca.ArtifactType == "Changeset"
+                    select ca.Url).FirstOrDefault();
+        }
     }
 
     public class NameValuePair
