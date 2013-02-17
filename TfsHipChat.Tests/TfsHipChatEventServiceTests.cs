@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NSubstitute;
 using TfsHipChat.Tfs.Events;
 using Xunit;
@@ -16,8 +15,8 @@ namespace TfsHipChat.Tests
         [Fact]
         public void Notify_ShouldThrowException_WhenInvalidXmlData()
         {
-            var notifier = Substitute.For<INotifier>();
-            var eventService = new TfsHipChatEventService(notifier, new Dictionary<string, int>());
+            var notificationHandler = Substitute.For<INotificationHandler>();
+            var eventService = new TfsHipChatEventService(notificationHandler);
             const string eventXml = "invalid_xml";
 
             Assert.Throws<XmlException>(() => eventService.Notify(eventXml, TfsIdentityXml));
@@ -26,81 +25,41 @@ namespace TfsHipChat.Tests
         [Fact]
         public void Notify_ShouldThrowException_WhenUnsupportedEvent()
         {
-            var notifier = Substitute.For<INotifier>();
-            var eventService = new TfsHipChatEventService(notifier, new Dictionary<string, int>());
+            var notificationHandler = Substitute.For<INotificationHandler>();
+            var eventService = new TfsHipChatEventService(notificationHandler);
             const string eventXml = "<EventThatDoesNotExist></EventThatDoesNotExist>";
 
             Assert.Throws<NotSupportedException>(() => eventService.Notify(eventXml, TfsIdentityXml));
         }
 
         [Fact]
-        public void Notify_ShouldSendCheckinNotification_WhenCheckinEvent()
+        public void Notify_ShouldHandleCheckinEvent_WhenCheckinEvent()
         {
-            var notifier = Substitute.For<INotifier>();
-            var teamProjectMap = new Dictionary<string, int> { { "testproject", 1234 } };
-            var eventService = new TfsHipChatEventService(notifier, teamProjectMap);
+            var notificationHandler = Substitute.For<INotificationHandler>();
+            var eventService = new TfsHipChatEventService(notificationHandler);
             var eventXml = CreateCheckinEvent();
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
-            notifier.ReceivedWithAnyArgs().SendCheckinNotification(null, 0);
+            notificationHandler.ReceivedWithAnyArgs().HandleCheckinEvent(null);
         }
 
         [Fact]
-        public void Notify_ShouldSendBuildCompletionFailedNotification_WhenBuildIsBroken()
+        public void Notify_ShouldHandleBuildCompletionEvent_WhenBuildCompletionEvent()
         {
-            var notifier = Substitute.For<INotifier>();
-            var teamProjectMap = new Dictionary<string, int> { { "testproject", 1234 } };
-            var eventService = new TfsHipChatEventService(notifier, teamProjectMap);
-            var eventXml = CreateFailedBuildCompletion();
+            var notificationHandler = Substitute.For<INotificationHandler>();
+            var eventService = new TfsHipChatEventService(notificationHandler);
+            var eventXml = CreateBuildCompletionEvent();
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
-            notifier.ReceivedWithAnyArgs().SendBuildCompletionFailedNotification(null, 0);
-        }
-
-        [Fact]
-        public void Notify_ShouldSendBuildCompletionSuccessNotification_WhenBuildIsSuccessful()
-        {
-            var notifier = Substitute.For<INotifier>();
-            var teamProjectMap = new Dictionary<string, int> { { "testproject", 1234 } };
-            var eventService = new TfsHipChatEventService(notifier, teamProjectMap);
-            var eventXml = CreateSuccessfulBuildCompletion();
-
-            eventService.Notify(eventXml, TfsIdentityXml);
-
-            notifier.ReceivedWithAnyArgs().SendBuildCompletionSuccessNotification(null, 0);
-        }
-
-        [Fact]
-        public void Notify_ShouldNotSendBuildCompletionFailedNotification_WhenBuildIsSuccessful()
-        {
-            var notifier = Substitute.For<INotifier>();
-            var teamProjectMap = new Dictionary<string, int> { { "testproject", 1234 } };
-            var eventService = new TfsHipChatEventService(notifier, teamProjectMap);
-            var eventXml = CreateSuccessfulBuildCompletion();
-
-            eventService.Notify(eventXml, TfsIdentityXml);
-
-            notifier.DidNotReceiveWithAnyArgs().SendBuildCompletionFailedNotification(null, 0);
-        }
-
-        [Fact]
-        public void Notify_ShouldNotSendBuildCompletionSuccessNotification_WhenBuildIsFailed()
-        {
-            var notifier = Substitute.For<INotifier>();
-            var teamProjectMap = new Dictionary<string, int> { { "testproject", 1234 } };
-            var eventService = new TfsHipChatEventService(notifier, teamProjectMap);
-            var eventXml = CreateFailedBuildCompletion();
-
-            eventService.Notify(eventXml, TfsIdentityXml);
-
-            notifier.DidNotReceiveWithAnyArgs().SendBuildCompletionSuccessNotification(null, 0);
+            notificationHandler.ReceivedWithAnyArgs().HandleBuildCompletionEvent(null);
         }
 
         private static string CreateCheckinEvent()
         {
-            var checkinEvent = new CheckinEvent { TeamProject = "TestProject" };
+            var checkinEvent = new CheckinEvent();
+
             var serializer = new XmlSerializer(typeof(CheckinEvent));
             var sw = new StringWriter();
             serializer.Serialize(sw, checkinEvent);
@@ -108,20 +67,9 @@ namespace TfsHipChat.Tests
             return sw.ToString();
         }
 
-        private static string CreateSuccessfulBuildCompletion()
+        private static string CreateBuildCompletionEvent()
         {
-            var buildEvent = new BuildCompletionEvent { CompletionStatus = "Successfully Completed", TeamProject = "TestProject" };
-
-            var serializer = new XmlSerializer(typeof(BuildCompletionEvent));
-            var sw = new StringWriter();
-            serializer.Serialize(sw, buildEvent);
-
-            return sw.ToString();
-        }
-
-        private static string CreateFailedBuildCompletion()
-        {
-            var buildEvent = new BuildCompletionEvent { TeamProject = "TestProject" };
+            var buildEvent = new BuildCompletionEvent();
 
             var serializer = new XmlSerializer(typeof(BuildCompletionEvent));
             var sw = new StringWriter();
