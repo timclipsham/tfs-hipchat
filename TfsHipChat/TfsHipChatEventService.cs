@@ -11,19 +11,24 @@ namespace TfsHipChat
 {
     public class TfsHipChatEventService : IEventService
     {
-        private readonly IDictionary<string, INotifier> _projectMap;
+        private readonly INotifier _notifier;
+        private readonly IDictionary<string, int> _teamProjectMap;
 
         // TODO: replace poor man's IoC with a full solution
         public TfsHipChatEventService()
+            : this(new HipChatNotifier(),
+                   Properties.Settings.Default.ProjectRoomMap.OfType<string>()
+                             .Select(s => s.Split('|'))
+                             .ToDictionary(arr => arr[0].ToLower(), arr => int.Parse(arr[1])))
         {
-            _projectMap = Properties.Settings.Default.ProjectRoomMap.OfType<string>().Select(x => x.Split('|')).ToDictionary(x => x[0].ToLower(), x => (INotifier)new HipChatNotifier(Convert.ToInt32(x[1])));
         }
 
-        public TfsHipChatEventService(IDictionary<string, INotifier> projectMap)
+        public TfsHipChatEventService(INotifier notifier, IDictionary<string, int> teamProjectMap)
         {
-            _projectMap = projectMap;
+            _notifier = notifier;
+            _teamProjectMap = teamProjectMap;
         }
-        
+
         public void Notify(string eventXml, string tfsIdentityXml)
         {
             var xml = XElement.Parse(eventXml);
@@ -33,34 +38,35 @@ namespace TfsHipChat
                 case "CheckinEvent":
                     {
                         var checkinEvent = DeserializeXmlToType<CheckinEvent>(eventXml);
-                        var teamproject = checkinEvent.TeamProject.ToLower();
-                        INotifier notifier;
+                        var teamProject = checkinEvent.TeamProject.ToLower();
+                        int roomId;
 
-                        if (_projectMap.TryGetValue(teamproject, out notifier))
+                        if (_teamProjectMap.TryGetValue(teamProject, out roomId))
                         {
-                            notifier.SendCheckinNotification(checkinEvent);
+                            _notifier.SendCheckinNotification(checkinEvent, roomId);
                         }
 
                         break;
                     }
+
                 case "BuildCompletionEvent":
                     {
                         var buildCompletionEvent = DeserializeXmlToType<BuildCompletionEvent>(eventXml);
-                        var teamproject = buildCompletionEvent.TeamProject.ToLower();
-                        INotifier notifier;
+                        var teamProject = buildCompletionEvent.TeamProject.ToLower();
+                        int roomId;
 
-                        if (!_projectMap.TryGetValue(teamproject, out notifier))
+                        if (!_teamProjectMap.TryGetValue(teamProject, out roomId))
                         {
                             return;
                         }
 
                         if (buildCompletionEvent.CompletionStatus == "Successfully Completed")
                         {
-                            notifier.SendBuildCompletionSuccessNotification(buildCompletionEvent);
+                            _notifier.SendBuildCompletionSuccessNotification(buildCompletionEvent, roomId);
                         }
                         else
                         {
-                            notifier.SendBuildCompletionFailedNotification(buildCompletionEvent);
+                            _notifier.SendBuildCompletionFailedNotification(buildCompletionEvent, roomId);
                         }
                         break;
                     }
@@ -69,7 +75,8 @@ namespace TfsHipChat
             }
         }
 
-        private T DeserializeXmlToType<T>(string eventXml) where T : class {
+        private T DeserializeXmlToType<T>(string eventXml) where T : class
+        {
             var serializer = new XmlSerializer(typeof(T));
 
             using (var reader = new StringReader(eventXml))
