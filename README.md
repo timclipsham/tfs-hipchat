@@ -7,7 +7,8 @@ Send Team Foundation Server event notifications to HipChat.
 1. Build the solution
 2. Edit the app.config and specify your:
  * HipChat API token
- * HipChat Room ID
+ * 1 or more Team Project + HipChat Room ID configurations (in the format `<string>MyTeamProject|1425</string>`).
+   Each configuration will send notifications associated with the Team Project to the specified HipChat room. 
 3. Run the executable somewhere your TFS server can access (by default it hosts the service at http://localhost:8731/TfsHipChat)
 4. Configure your TFS instance to push notifications to it for the desired events (NOTE: admin access to TFS is required)
 
@@ -29,6 +30,6 @@ Event types currently supported:
 ## Contributions
 To put it simply, feel free to contribute. I'm keen to see it:
  * Be much simpler to configure and choose what events you care about; potentially even provide means to automatically wire and unwire it with TFS based on the desired events
- * Support TFS 2010 and Team Foundation Service? (formerly tfspreview.com)
+ * Support Team Foundation Service? (formerly tfspreview.com)
  * Add support for other notification types with better messages
  * Not be a quick and dirty console app --> maybe a WCF service that could easily be deployed to various PaaS providers?
