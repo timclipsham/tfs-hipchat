@@ -4,7 +4,7 @@ using TfsHipChat.Tfs.Events;
 
 namespace TfsHipChat
 {
-    public class HipChatNotifier : INotifier
+    public class HipChatNotifier : IHipChatNotifier
     {
         private readonly IConfigurationProvider _configurationProvider;
         private readonly HipChatClient _hipChatClient;
@@ -32,7 +32,7 @@ namespace TfsHipChat
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.yellow);
         }
 
-        public void SendBuildCompletionFailedNotification(BuildCompletionEvent buildEvent, int roomId)
+        public void SendBuildFailedNotification(BuildCompletionEvent buildEvent, int roomId)
         {
             var message = string.Format("{0} build <a href=\"{1}\">{2}</a> {3} (requested by {4})",
                 buildEvent.TeamProject, buildEvent.Url, buildEvent.Id, buildEvent.CompletionStatus,
@@ -41,7 +41,7 @@ namespace TfsHipChat
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.red);
         }
 
-        public void SendBuildCompletionSuccessNotification(BuildCompletionEvent buildEvent, int roomId)
+        public void SendBuildSuccessNotification(BuildCompletionEvent buildEvent, int roomId)
         {
             var message = string.Format("{0} build <a href=\"{1}\">{2}</a> {3} (requested by {4})",
                 buildEvent.TeamProject, buildEvent.Url, buildEvent.Id, buildEvent.CompletionStatus,

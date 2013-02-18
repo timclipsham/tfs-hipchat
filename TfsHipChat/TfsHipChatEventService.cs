@@ -28,12 +28,12 @@ namespace TfsHipChat
             {
                 case "CheckinEvent":
                     var checkinEvent = DeserializeXmlToType<CheckinEvent>(eventXml);
-                    _notificationHandler.HandleCheckinEvent(checkinEvent);
+                    _notificationHandler.HandleCheckin(checkinEvent);
                     break;
 
                 case "BuildCompletionEvent":
                     var buildEvent = DeserializeXmlToType<BuildCompletionEvent>(eventXml);
-                    _notificationHandler.HandleBuildCompletionEvent(buildEvent);
+                    _notificationHandler.HandleBuildCompletion(buildEvent);
                     break;
 
                 default:

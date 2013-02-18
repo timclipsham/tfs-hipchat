@@ -9,22 +9,22 @@ namespace TfsHipChat.Tests
     public class NotificationHandlerTests
     {
         [Fact]
-        public void HandleBuildCompletionEvent_ShouldSendBuildFailedNotification_WhenBuildIsBroken()
+        public void HandleBuildCompletion_ShouldSendBuildFailed_WhenBuildBroken()
         {
-            var notifier = Substitute.For<INotifier>();
+            var notifier = Substitute.For<IHipChatNotifier>();
             var configProvider = CreateFakeConfigurationProvider();
             var notificationHandler = new NotificationHandler(notifier, configProvider);
             var buildEvent = new BuildCompletionEvent { TeamProject = "TestProject" };
 
-            notificationHandler.HandleBuildCompletionEvent(buildEvent);
+            notificationHandler.HandleBuildCompletion(buildEvent);
 
-            notifier.ReceivedWithAnyArgs().SendBuildCompletionFailedNotification(null, 0);
+            notifier.ReceivedWithAnyArgs().SendBuildFailedNotification(null, 0);
         }
 
         [Fact]
-        public void HandleBuildCompletionEvent_ShouldSendBuildSuccessNotification_WhenBuildIsSuccessful()
+        public void HandleBuildCompletion_ShouldSendBuildSuccess_WhenBuildSuccessful()
         {
-            var notifier = Substitute.For<INotifier>();
+            var notifier = Substitute.For<IHipChatNotifier>();
             var configProvider = CreateFakeConfigurationProvider();
             var notificationHandler = new NotificationHandler(notifier, configProvider);
             var buildEvent = new BuildCompletionEvent
@@ -33,15 +33,15 @@ namespace TfsHipChat.Tests
                                      TeamProject = "TestProject"
                                  };
 
-            notificationHandler.HandleBuildCompletionEvent(buildEvent);
+            notificationHandler.HandleBuildCompletion(buildEvent);
 
-            notifier.ReceivedWithAnyArgs().SendBuildCompletionSuccessNotification(null, 0);
+            notifier.ReceivedWithAnyArgs().SendBuildSuccessNotification(null, 0);
         }
 
         [Fact]
-        public void HandleBuildCompletionEvent_ShouldNotSendBuildFailedNotification_WhenBuildIsSuccessful()
+        public void HandleBuildCompletion_ShouldNotSendBuildFailed_WhenBuildSuccessful()
         {
-            var notifier = Substitute.For<INotifier>();
+            var notifier = Substitute.For<IHipChatNotifier>();
             var configProvider = CreateFakeConfigurationProvider();
             var notificationHandler = new NotificationHandler(notifier, configProvider);
             var buildEvent = new BuildCompletionEvent
@@ -50,28 +50,28 @@ namespace TfsHipChat.Tests
                                      TeamProject = "TestProject"
                                  };
 
-            notificationHandler.HandleBuildCompletionEvent(buildEvent);
+            notificationHandler.HandleBuildCompletion(buildEvent);
 
-            notifier.DidNotReceiveWithAnyArgs().SendBuildCompletionFailedNotification(null, 0);
+            notifier.DidNotReceiveWithAnyArgs().SendBuildFailedNotification(null, 0);
         }
 
         [Fact]
-        public void HandleBuildCompletionEvent_ShouldNotSendBuildSuccessNotification_WhenBuildIsBroken()
+        public void HandleBuildCompletion_ShouldNotSendBuildSuccess_WhenBuildBroken()
         {
-            var notifier = Substitute.For<INotifier>();
+            var notifier = Substitute.For<IHipChatNotifier>();
             var configProvider = CreateFakeConfigurationProvider();
             var notificationHandler = new NotificationHandler(notifier, configProvider);
             var buildEvent = new BuildCompletionEvent { TeamProject = "TestProject" };
 
-            notificationHandler.HandleBuildCompletionEvent(buildEvent);
+            notificationHandler.HandleBuildCompletion(buildEvent);
 
-            notifier.DidNotReceiveWithAnyArgs().SendBuildCompletionSuccessNotification(null, 0);
+            notifier.DidNotReceiveWithAnyArgs().SendBuildSuccessNotification(null, 0);
         }
 
         [Fact]
-        public void HandleBuildCompletionEvent_ShouldSendBuildSuccessNotificationToCorrectRoom_WhenBuildIsSuccessful()
+        public void HandleBuildCompletion_ShouldSendBuildSuccessToCorrectRoom_WhenBuildSuccessful()
         {
-            var notifier = Substitute.For<INotifier>();
+            var notifier = Substitute.For<IHipChatNotifier>();
             var configProvider = CreateFakeConfigurationProvider();
             var notificationHandler = new NotificationHandler(notifier, configProvider);
             var buildEvent = new BuildCompletionEvent
@@ -80,41 +80,41 @@ namespace TfsHipChat.Tests
                                      TeamProject = "AnotherTestProject"
                                  };
 
-            notificationHandler.HandleBuildCompletionEvent(buildEvent);
+            notificationHandler.HandleBuildCompletion(buildEvent);
 
-            notifier.Received().SendBuildCompletionSuccessNotification(buildEvent, 456);
+            notifier.Received().SendBuildSuccessNotification(buildEvent, 456);
         }
 
         [Fact]
-        public void HandleBuildCompletionEvent_ShouldSendBuildFailedNotificationToCorrectRoom_WhenBuildIsBroken()
+        public void HandleBuildCompletion_ShouldSendBuildFailedToCorrectRoom_WhenBuildBroken()
         {
-            var notifier = Substitute.For<INotifier>();
+            var notifier = Substitute.For<IHipChatNotifier>();
             var configProvider = CreateFakeConfigurationProvider();
             var notificationHandler = new NotificationHandler(notifier, configProvider);
             var buildEvent = new BuildCompletionEvent { TeamProject = "AnotherTestProject" };
 
-            notificationHandler.HandleBuildCompletionEvent(buildEvent);
+            notificationHandler.HandleBuildCompletion(buildEvent);
 
-            notifier.Received().SendBuildCompletionFailedNotification(buildEvent, 456);
+            notifier.Received().SendBuildFailedNotification(buildEvent, 456);
         }
 
         [Fact]
-        public void HandleBuildCompletionEvent_ShouldNotSendBuildFailedNotification_WhenBuildIsBrokenAndTeamProjectMappingNotDefined()
+        public void HandleBuildCompletion_ShouldNotSendBuildFailed_WhenBuildBrokenAndMappingNotDefined()
         {
-            var notifier = Substitute.For<INotifier>();
+            var notifier = Substitute.For<IHipChatNotifier>();
             var configProvider = CreateFakeConfigurationProvider();
             var notificationHandler = new NotificationHandler(notifier, configProvider);
             var buildEvent = new BuildCompletionEvent{ TeamProject = "ProjectWithNoMapping" };
 
-            notificationHandler.HandleBuildCompletionEvent(buildEvent);
+            notificationHandler.HandleBuildCompletion(buildEvent);
 
-            notifier.DidNotReceiveWithAnyArgs().SendBuildCompletionFailedNotification(null, 0);
+            notifier.DidNotReceiveWithAnyArgs().SendBuildFailedNotification(null, 0);
         }
 
         [Fact]
-        public void HandleBuildCompletionEvent_ShouldNotSendBuildSuccessNotification_WhenBuildIsSuccessfulAndTeamProjectMappingNotDefined()
+        public void HandleBuildCompletion_ShouldNotSendBuildSuccess_WhenBuildSuccessfulAndMappingNotDefined()
         {
-            var notifier = Substitute.For<INotifier>();
+            var notifier = Substitute.For<IHipChatNotifier>();
             var configProvider = CreateFakeConfigurationProvider();
             var notificationHandler = new NotificationHandler(notifier, configProvider);
             var buildEvent = new BuildCompletionEvent
@@ -123,9 +123,9 @@ namespace TfsHipChat.Tests
                                      TeamProject = "ProjectWithNoMapping"
                                  };
 
-            notificationHandler.HandleBuildCompletionEvent(buildEvent);
+            notificationHandler.HandleBuildCompletion(buildEvent);
 
-            notifier.DidNotReceiveWithAnyArgs().SendBuildCompletionSuccessNotification(null, 0);
+            notifier.DidNotReceiveWithAnyArgs().SendBuildSuccessNotification(null, 0);
         }
 
         private static IConfigurationProvider CreateFakeConfigurationProvider()

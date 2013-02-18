@@ -41,7 +41,7 @@ namespace TfsHipChat.Tests
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
-            notificationHandler.ReceivedWithAnyArgs().HandleCheckinEvent(null);
+            notificationHandler.ReceivedWithAnyArgs().HandleCheckin(null);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace TfsHipChat.Tests
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
-            notificationHandler.ReceivedWithAnyArgs().HandleBuildCompletionEvent(null);
+            notificationHandler.ReceivedWithAnyArgs().HandleBuildCompletion(null);
         }
 
         private static string CreateCheckinEvent()

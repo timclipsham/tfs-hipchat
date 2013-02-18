@@ -6,7 +6,7 @@ namespace TfsHipChat
 {
     public class NotificationHandler : INotificationHandler
     {
-        private readonly INotifier _notifier;
+        private readonly IHipChatNotifier _hipChatNotifier;
         private readonly IConfigurationProvider _configurationProvider;
 
         // TODO: replace poor man's IoC with a full solution
@@ -15,23 +15,23 @@ namespace TfsHipChat
         {
         }
 
-        public NotificationHandler(INotifier notifier, IConfigurationProvider configurationProvider)
+        public NotificationHandler(IHipChatNotifier hipChatNotifier, IConfigurationProvider configurationProvider)
         {
-            _notifier = notifier;
+            _hipChatNotifier = hipChatNotifier;
             _configurationProvider = configurationProvider;
         }
 
-        public void HandleCheckinEvent(CheckinEvent checkinEvent)
+        public void HandleCheckin(CheckinEvent checkinEvent)
         {
             var teamProjectMapping = FindTeamProjectMapping(checkinEvent.TeamProject);
 
             if (teamProjectMapping != null)
             {
-                _notifier.SendCheckinNotification(checkinEvent, teamProjectMapping.HipChatRoomId);
+                _hipChatNotifier.SendCheckinNotification(checkinEvent, teamProjectMapping.HipChatRoomId);
             }
         }
 
-        public void HandleBuildCompletionEvent(BuildCompletionEvent buildEvent)
+        public void HandleBuildCompletion(BuildCompletionEvent buildEvent)
         {
             var teamProjectMapping = FindTeamProjectMapping(buildEvent.TeamProject);
 
@@ -42,11 +42,11 @@ namespace TfsHipChat
 
             if (buildEvent.CompletionStatus == "Successfully Completed")
             {
-                _notifier.SendBuildCompletionSuccessNotification(buildEvent, teamProjectMapping.HipChatRoomId);
+                _hipChatNotifier.SendBuildSuccessNotification(buildEvent, teamProjectMapping.HipChatRoomId);
             }
             else
             {
-                _notifier.SendBuildCompletionFailedNotification(buildEvent, teamProjectMapping.HipChatRoomId);
+                _hipChatNotifier.SendBuildFailedNotification(buildEvent, teamProjectMapping.HipChatRoomId);
             }
         }
 

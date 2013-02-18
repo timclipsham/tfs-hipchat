@@ -4,7 +4,7 @@ namespace TfsHipChat
 {
     public interface INotificationHandler
     {
-        void HandleCheckinEvent(CheckinEvent checkinEvent);
-        void HandleBuildCompletionEvent(BuildCompletionEvent buildEvent);
+        void HandleCheckin(CheckinEvent checkinEvent);
+        void HandleBuildCompletion(BuildCompletionEvent buildEvent);
     }
 }

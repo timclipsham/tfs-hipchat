@@ -56,7 +56,7 @@
     <Compile Include="HipChatNotifier.cs" />
     <Compile Include="IEventService.cs" />
     <Compile Include="INotificationHandler.cs" />
-    <Compile Include="INotifier.cs" />
+    <Compile Include="IHipChatNotifier.cs" />
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
