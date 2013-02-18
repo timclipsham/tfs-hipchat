@@ -1,0 +1,23 @@
+/*
+ * Sample configuration file for TfsHipChat.
+ * Make a copy of this file named "Config.json" and fill in the blanks
+ */
+{
+	/* Who the notification is sent from in the HipChat room */
+	"hipChatFrom": "TFS",
+	
+	/* Token for connecting to the HipChat API */
+	"hipChatToken": "your_hipchat_token_goes_here",
+
+	/* TFS Team Project to HipChat room mappings */
+	"teamProjectMappings": [
+		{
+			"teamProjectName": "AwesomeProject1",
+			"hipChatRoomId": 123
+		},
+		{
+			"teamProjectName": "AwesomeProject2",
+			"hipChatRoomId": 456
+		}
+	]
+}
