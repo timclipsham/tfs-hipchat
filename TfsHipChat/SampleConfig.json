@@ -1,6 +1,6 @@
 /*
- * Sample configuration file for TfsHipChat.
- * Make a copy of this file named "Config.json" and fill in the blanks
+ * Sample configuration file for TfsHipChat
+ * Make a copy of this file named "Config.json" and fill in the blanks :)
  */
 {
 	/* Who the notification is sent from in the HipChat room */
@@ -9,8 +9,15 @@
 	/* Token for connecting to the HipChat API */
 	"hipChatToken": "your_hipchat_token_goes_here",
 
-	/* TFS Team Project to HipChat room mappings */
-	"teamProjectMappings": [
+	/*
+	 * TFS Team Project to HipChat room mappings
+	 *
+	 * Notifications associated with the team project will be sent the specified HipChat
+	 * room. Multiple team projects can send notifications to the same HipChat room.
+	 * However, a team project cannot send messages to multiple HipChat rooms.
+	 */
+	"teamProjectMappings":
+	[
 		{
 			"teamProjectName": "AwesomeProject1",
 			"hipChatRoomId": 123
