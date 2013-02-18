@@ -1,18 +1,25 @@
 ﻿using HipChat;
+using TfsHipChat.Configuration;
 using TfsHipChat.Tfs.Events;
 
 namespace TfsHipChat
 {
     public class HipChatNotifier : INotifier
     {
+        private readonly IConfigurationProvider _configurationProvider;
         private readonly HipChatClient _hipChatClient;
 
-        public HipChatNotifier()
+        public HipChatNotifier() : this(new ConfigurationProvider())
         {
+        }
+        
+        public HipChatNotifier(IConfigurationProvider configurationProvider)
+        {
+            _configurationProvider = configurationProvider;
             _hipChatClient = new HipChatClient
             {
-                Token = Properties.Settings.Default.HipChat_Token,
-                From = Properties.Settings.Default.HipChat_From
+                Token = _configurationProvider.Config.HipChatToken,
+                From = _configurationProvider.Config.HipChatFrom
             };
         }
 
