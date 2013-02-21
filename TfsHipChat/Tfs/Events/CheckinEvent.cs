@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace TfsHipChat.Tfs.Events
@@ -50,12 +52,23 @@ namespace TfsHipChat.Tfs.Events
 
         public string GetCommitterName()
         {
-            if (CommitterDisplay == null || CommitterDisplay.Trim().Length == 0)
+            if (CommitterDisplay != null && CommitterDisplay.Trim().Length > 0)
             {
-                return Committer;
+                return CommitterDisplay;
             }
 
-            return CommitterDisplay;
+            var committerName = Committer;
+            
+            // regex to match "DOMAIN\user.name"
+            var match = Regex.Match(committerName, @"^[^\\]+\\([^\.]+)\.([^\.]+)");
+
+            if (match.Success)
+            {
+                var name = match.Groups[1].Value + " " + match.Groups[2].Value;
+                committerName = CultureInfo.GetCultureInfo("en-US").TextInfo.ToTitleCase(name);
+            }
+
+            return committerName;
         }
     }
 
