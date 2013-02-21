@@ -27,5 +27,57 @@ namespace TfsHipChat.Tests.Tfs.Events
 
             Assert.Equal(null, url);
         }
+
+        [Fact]
+        public void GetCommitterName_ShouldReturnCommitterDisplay_WhenItExists()
+        {
+            var checkinEvent = new CheckinEvent
+            {
+                CommitterDisplay = "User Name",
+                Committer = @"DOMAIN\user.name"
+            };
+
+            var committerName = checkinEvent.GetCommitterName();
+
+            Assert.Equal("User Name", committerName);
+        }
+
+        [Fact]
+        public void GetCommitterName_ShouldReturnCommitter_WhenCommitterDisplayIsNull()
+        {
+            var checkinEvent = new CheckinEvent { Committer = @"DOMAIN\user.name" };
+
+            var committerName = checkinEvent.GetCommitterName();
+
+            Assert.Equal(@"DOMAIN\user.name", committerName);
+        }
+
+        [Fact]
+        public void GetCommitterName_ShouldReturnCommitter_WhenCommitterDisplayIsEmpty()
+        {
+            var checkinEvent = new CheckinEvent
+            {
+                CommitterDisplay = "",
+                Committer = @"DOMAIN\user.name"
+            };
+
+            var committerName = checkinEvent.GetCommitterName();
+
+            Assert.Equal(@"DOMAIN\user.name", committerName);
+        }
+
+        [Fact]
+        public void GetCommitterName_ShouldReturnCommitter_WhenCommitterDisplayIsWhitespace()
+        {
+            var checkinEvent = new CheckinEvent
+            {
+                CommitterDisplay = " \t ",
+                Committer = @"DOMAIN\user.name"
+            };
+
+            var committerName = checkinEvent.GetCommitterName();
+
+            Assert.Equal(@"DOMAIN\user.name", committerName);
+        }
     }
 }

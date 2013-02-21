@@ -19,7 +19,7 @@ namespace TfsHipChat
         public void SendCheckinNotification(CheckinEvent checkinEvent, int roomId)
         {
             var message = string.Format("{0} checked in changeset <a href=\"{1}\">{2}</a> ({4})<br>{3}",
-                checkinEvent.CommitterDisplay, checkinEvent.GetChangesetUrl(), checkinEvent.Number,
+                checkinEvent.GetCommitterName(), checkinEvent.GetChangesetUrl(), checkinEvent.Number,
                 checkinEvent.Comment, checkinEvent.TeamProject);
             _hipChatClient.RoomId = roomId;
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.yellow);

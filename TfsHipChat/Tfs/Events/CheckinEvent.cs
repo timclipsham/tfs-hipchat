@@ -47,6 +47,16 @@ namespace TfsHipChat.Tfs.Events
                     where ca.ArtifactType == "Changeset"
                     select ca.Url).FirstOrDefault();
         }
+
+        public string GetCommitterName()
+        {
+            if (CommitterDisplay == null || CommitterDisplay.Trim().Length == 0)
+            {
+                return Committer;
+            }
+
+            return CommitterDisplay;
+        }
     }
 
     public class NameValuePair
