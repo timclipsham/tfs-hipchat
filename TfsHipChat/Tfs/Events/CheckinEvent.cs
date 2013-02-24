@@ -57,18 +57,8 @@ namespace TfsHipChat.Tfs.Events
                 return CommitterDisplay;
             }
 
-            var committerName = Committer;
-            
-            // regex to match "DOMAIN\user.name"
-            var match = Regex.Match(committerName, @"^[^\\]+\\([^\.]+)\.([^\.]+)");
-
-            if (match.Success)
-            {
-                var name = match.Groups[1].Value + " " + match.Groups[2].Value;
-                committerName = CultureInfo.GetCultureInfo("en-US").TextInfo.ToTitleCase(name);
-            }
-
-            return committerName;
+            var formatter = new StandardDomainUserNameFormatter();
+            return formatter.ToDisplayName(Committer);
         }
     }
 
