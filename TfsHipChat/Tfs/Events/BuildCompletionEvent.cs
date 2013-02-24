@@ -22,5 +22,11 @@ namespace TfsHipChat.Tfs.Events
         public string BuildStartTime { get; set; }
         public string BuildCompleteTime { get; set; }
         public string BuildMachine { get; set; }
+
+        public string GetRequestedByName()
+        {
+            var formatter = new StandardDomainUserNameFormatter();
+            return formatter.ToDisplayName(RequestedBy);
+        }
     }
 }
