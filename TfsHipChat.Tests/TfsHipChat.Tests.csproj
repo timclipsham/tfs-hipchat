@@ -49,6 +49,7 @@
     <Compile Include="TfsHipChatEventServiceTests.cs" />
     <Compile Include="Tfs\Events\CheckinEventTests.cs" />
     <Compile Include="Tfs\TfsIdentityTests.cs" />
+    <Compile Include="Tfs\StandardDomainUserNameFormatterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
