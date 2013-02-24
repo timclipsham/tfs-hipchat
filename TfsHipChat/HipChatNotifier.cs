@@ -29,7 +29,7 @@ namespace TfsHipChat
         {
             var message = string.Format("{0} build <a href=\"{1}\">{2}</a> {3} (requested by {4})",
                 buildEvent.TeamProject, buildEvent.Url, buildEvent.Id, buildEvent.CompletionStatus,
-                buildEvent.RequestedBy);
+                buildEvent.GetRequestedByName());
             _hipChatClient.RoomId = roomId;
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.red);
         }
@@ -38,7 +38,7 @@ namespace TfsHipChat
         {
             var message = string.Format("{0} build <a href=\"{1}\">{2}</a> {3} (requested by {4})",
                 buildEvent.TeamProject, buildEvent.Url, buildEvent.Id, buildEvent.CompletionStatus,
-                buildEvent.RequestedBy);
+                buildEvent.GetRequestedByName());
             _hipChatClient.RoomId = roomId;
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.green);
         }
