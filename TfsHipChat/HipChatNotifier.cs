@@ -26,7 +26,7 @@ namespace TfsHipChat
         public void SendCheckinNotification(CheckinEvent checkinEvent, int roomId)
         {
             var message = string.Format("{0} checked in changeset <a href=\"{1}\">{2}</a> ({4})<br>{3}",
-                checkinEvent.CommitterDisplay, checkinEvent.GetChangesetUrl(), checkinEvent.Number,
+                checkinEvent.GetCommitterName(), checkinEvent.GetChangesetUrl(), checkinEvent.Number,
                 checkinEvent.Comment, checkinEvent.TeamProject);
             _hipChatClient.RoomId = roomId;
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.yellow);
@@ -36,7 +36,7 @@ namespace TfsHipChat
         {
             var message = string.Format("{0} build <a href=\"{1}\">{2}</a> {3} (requested by {4})",
                 buildEvent.TeamProject, buildEvent.Url, buildEvent.Id, buildEvent.CompletionStatus,
-                buildEvent.RequestedBy);
+                buildEvent.GetRequestedByName());
             _hipChatClient.RoomId = roomId;
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.red);
         }
@@ -45,7 +45,7 @@ namespace TfsHipChat
         {
             var message = string.Format("{0} build <a href=\"{1}\">{2}</a> {3} (requested by {4})",
                 buildEvent.TeamProject, buildEvent.Url, buildEvent.Id, buildEvent.CompletionStatus,
-                buildEvent.RequestedBy);
+                buildEvent.GetRequestedByName());
             _hipChatClient.RoomId = roomId;
             _hipChatClient.SendMessage(message, HipChatClient.BackgroundColor.green);
         }

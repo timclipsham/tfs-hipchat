@@ -47,8 +47,10 @@
     <Compile Include="NotificationHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TfsHipChatEventServiceTests.cs" />
+    <Compile Include="Tfs\Events\BuildCompletionEventTests.cs" />
     <Compile Include="Tfs\Events\CheckinEventTests.cs" />
     <Compile Include="Tfs\TfsIdentityTests.cs" />
+    <Compile Include="Tfs\StandardDomainUserNameFormatterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

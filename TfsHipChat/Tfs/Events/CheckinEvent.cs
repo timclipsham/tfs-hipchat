@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace TfsHipChat.Tfs.Events
@@ -46,6 +48,17 @@ namespace TfsHipChat.Tfs.Events
             return (from ClientArtifact ca in Artifacts
                     where ca.ArtifactType == "Changeset"
                     select ca.Url).FirstOrDefault();
+        }
+
+        public string GetCommitterName()
+        {
+            if (CommitterDisplay != null && CommitterDisplay.Trim().Length > 0)
+            {
+                return CommitterDisplay;
+            }
+
+            var formatter = new StandardDomainUserNameFormatter();
+            return formatter.ToDisplayName(Committer);
         }
     }
 

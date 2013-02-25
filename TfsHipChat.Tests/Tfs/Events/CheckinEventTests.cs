@@ -27,5 +27,77 @@ namespace TfsHipChat.Tests.Tfs.Events
 
             Assert.Equal(null, url);
         }
+
+        [Fact]
+        public void GetCommitterName_ShouldReturnCommitterDisplay_WhenItExists()
+        {
+            var checkinEvent = new CheckinEvent
+            {
+                CommitterDisplay = "Committer Display",
+                Committer = "Committer"
+            };
+
+            var committerName = checkinEvent.GetCommitterName();
+
+            Assert.Equal("Committer Display", committerName);
+        }
+
+        [Fact]
+        public void GetCommitterName_ShouldReturnCommitter_WhenCommitterDisplayIsNull()
+        {
+            var checkinEvent = new CheckinEvent { Committer = "Committer" };
+
+            var committerName = checkinEvent.GetCommitterName();
+
+            Assert.Equal("Committer", committerName);
+        }
+
+        [Fact]
+        public void GetCommitterName_ShouldReturnCommitter_WhenCommitterDisplayIsEmpty()
+        {
+            var checkinEvent = new CheckinEvent
+            {
+                CommitterDisplay = "",
+                Committer = "Committer"
+            };
+
+            var committerName = checkinEvent.GetCommitterName();
+
+            Assert.Equal("Committer", committerName);
+        }
+
+        [Fact]
+        public void GetCommitterName_ShouldReturnCommitter_WhenCommitterDisplayIsWhitespace()
+        {
+            var checkinEvent = new CheckinEvent
+                                   {
+                                       CommitterDisplay = " \t ",
+                                       Committer = "Committer"
+                                   };
+
+            var committerName = checkinEvent.GetCommitterName();
+
+            Assert.Equal("Committer", committerName);
+        }
+
+        [Fact]
+        public void GetCommitterName_ShouldReturnFormattedCommitter_WhenNoCommitterDisplayAndStandardCommitterFormat()
+        {
+            var checkinEvent = new CheckinEvent { Committer = @"DOMAIN\user.name" };
+
+            var displayName = checkinEvent.GetCommitterName();
+
+            Assert.Equal("User Name", displayName);
+        }
+
+        [Fact]
+        public void GetCommitterName_ShouldReturnCommitter_WhenNoDisplayNameAndNonStanardCommitterFormat()
+        {
+            var checkinEvent = new CheckinEvent { Committer = @"DOMAIN\uname1" };
+
+            var displayName = checkinEvent.GetCommitterName();
+
+            Assert.Equal(@"DOMAIN\uname1", displayName);
+        }
     }
 }
