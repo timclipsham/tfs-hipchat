@@ -40,7 +40,16 @@ namespace TfsHipChat
                 return;
             }
 
-            if (buildEvent.CompletionStatus == "Successfully Completed")
+            var notification = (buildEvent.CompletionStatus == "Successfully Completed")
+                                   ? Notification.BuildCompletionSuccess
+                                   : Notification.BuildCompletionFailure;
+
+            if (!IsNotificationSubscribedTo(teamProjectMapping, notification))
+            {
+                return;
+            }
+
+            if (notification == Notification.BuildCompletionSuccess)
             {
                 _hipChatNotifier.SendBuildSuccessNotification(buildEvent, teamProjectMapping.HipChatRoomId);
             }
@@ -50,11 +59,17 @@ namespace TfsHipChat
             }
         }
 
-        private TeamProjectMapping FindTeamProjectMapping(string teamProjectName)
+        private TeamProjectMapping FindTeamProjectMapping(string teamProject)
         {
             return
                 _configurationProvider.Config.TeamProjectMappings.SingleOrDefault(
-                    t => t.TeamProjectName.ToLower() == teamProjectName.ToLower());
+                    t => t.TeamProjectName.ToLower() == teamProject.ToLower());
+        }
+
+        private static bool IsNotificationSubscribedTo(TeamProjectMapping teamProjectMapping, Notification notification)
+        {
+            return teamProjectMapping.Notifications == null ||
+                teamProjectMapping.Notifications.Contains(notification);
         }
     }
 }

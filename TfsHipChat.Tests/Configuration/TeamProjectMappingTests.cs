@@ -21,6 +21,13 @@ namespace TfsHipChat.Tests.Configuration
             Assert.Equal(1234, mapping.HipChatRoomId);
         }
 
+        [Fact]
+        public void Notifications_ShouldReturnNotifications_WhenValidJson()
+        {
+            var mapping = GetTeamProjectMapping();
+            Assert.Equal(2, mapping.Notifications.Count);
+        }
+
         private static TeamProjectMapping GetTeamProjectMapping()
         {
             using (var reader = new JsonTextReader(new StreamReader(@"Configuration\TestConfig.json")))

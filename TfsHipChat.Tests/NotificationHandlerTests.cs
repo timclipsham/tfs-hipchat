@@ -104,7 +104,7 @@ namespace TfsHipChat.Tests
             var notifier = Substitute.For<IHipChatNotifier>();
             var configProvider = CreateFakeConfigurationProvider();
             var notificationHandler = new NotificationHandler(notifier, configProvider);
-            var buildEvent = new BuildCompletionEvent{ TeamProject = "ProjectWithNoMapping" };
+            var buildEvent = new BuildCompletionEvent { TeamProject = "ProjectWithNoMapping" };
 
             notificationHandler.HandleBuildCompletion(buildEvent);
 
@@ -128,6 +128,36 @@ namespace TfsHipChat.Tests
             notifier.DidNotReceiveWithAnyArgs().SendBuildSuccessNotification(null, 0);
         }
 
+        [Fact]
+        public void HandleBuildCompletion_ShouldNotSendBuildSuccess_WhenNotificationNotSubscribed()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var buildEvent = new BuildCompletionEvent
+                                 {
+                                     CompletionStatus = "Successfully Completed",
+                                     TeamProject = "ProjectWithOnlyCheckin"
+                                 };
+
+            notificationHandler.HandleBuildCompletion(buildEvent);
+
+            notifier.DidNotReceiveWithAnyArgs().SendBuildSuccessNotification(null, 0);
+        }
+
+        [Fact]
+        public void HandleBuildCompletion_ShouldNotSendBuildFailed_WhenNotificationNotSubscribed()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var buildEvent = new BuildCompletionEvent { TeamProject = "ProjectWithOnlyCheckin" };
+
+            notificationHandler.HandleBuildCompletion(buildEvent);
+
+            notifier.DidNotReceiveWithAnyArgs().SendBuildFailedNotification(null, 0);
+        }
+
         private static IConfigurationProvider CreateFakeConfigurationProvider()
         {
             var config = new TfsHipChatConfig
@@ -135,7 +165,11 @@ namespace TfsHipChat.Tests
                                  TeamProjectMappings = new List<TeamProjectMapping>
                                                            {
                                                                new TeamProjectMapping("TestProject", 123),
-                                                               new TeamProjectMapping("AnotherTestProject", 456)
+                                                               new TeamProjectMapping("AnotherTestProject", 456),
+                                                               new TeamProjectMapping("ProjectWithOnlyCheckin", 789)
+                                                                   {
+                                                                       Notifications = new List<Notification> { Notification.Checkin }
+                                                                   }
                                                            }
                              };
 
