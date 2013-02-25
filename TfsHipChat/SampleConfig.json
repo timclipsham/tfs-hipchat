@@ -24,7 +24,13 @@
 		},
 		{
 			"teamProjectName": "AwesomeProject2",
-			"hipChatRoomId": 456
+			"hipChatRoomId": 456,
+			"notifications":
+			[
+				"BuildCompletionSuccess",
+				"BuildCompletionFailure",
+				"Checkin"
+			]
 		}
 	]
 }
