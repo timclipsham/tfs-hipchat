@@ -1,0 +1,9 @@
+﻿{
+	"teamProjectName": "TestProject",
+	"hipChatRoomId": 1234,
+	"notifications":
+	[
+		"Checkin",
+		"BuildCompletionSuccess"
+	]
+}
