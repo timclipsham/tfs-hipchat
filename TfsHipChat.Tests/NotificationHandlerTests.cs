@@ -197,6 +197,19 @@ namespace TfsHipChat.Tests
             notifier.DidNotReceiveWithAnyArgs().SendCheckinNotification(null, 0);
         }
 
+        [Fact]
+        public void HandleCheckin_ShouldSendNotificationToCorrectRoom_WhenCheckinOccurs()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var checkinEvent = new CheckinEvent { TeamProject = "AnotherTestProject" };
+
+            notificationHandler.HandleCheckin(checkinEvent);
+
+            notifier.Received().SendCheckinNotification(checkinEvent, 456);
+        }
+
         private static IConfigurationProvider CreateFakeConfigurationProvider()
         {
             var config = new TfsHipChatConfig
