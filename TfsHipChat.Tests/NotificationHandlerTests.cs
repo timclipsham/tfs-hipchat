@@ -210,6 +210,19 @@ namespace TfsHipChat.Tests
             notifier.Received().SendCheckinNotification(checkinEvent, 456);
         }
 
+        [Fact]
+        public void HandleCheckin_ShouldNotSendNotification_WhenMappingNotDefined()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var checkinEvent = new CheckinEvent { TeamProject = "ProjectWithNoMapping" };
+
+            notificationHandler.HandleCheckin(checkinEvent);
+
+            notifier.DidNotReceiveWithAnyArgs().SendCheckinNotification(null, 0);
+        }
+
         private static IConfigurationProvider CreateFakeConfigurationProvider()
         {
             var config = new TfsHipChatConfig
