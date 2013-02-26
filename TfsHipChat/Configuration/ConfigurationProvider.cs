@@ -1,26 +1,19 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
+using TfsHipChat.Properties;
 
 namespace TfsHipChat.Configuration
 {
     public class ConfigurationProvider : IConfigurationProvider
     {
-        private TfsHipChatConfig _tfsHipChatConfig;
-
-        public TfsHipChatConfig Config
+        public ConfigurationProvider()
         {
-            get
+            using (var reader = new JsonTextReader(new StreamReader(Settings.Default.DefaultConfigPath)))
             {
-                if (_tfsHipChatConfig == null)
-                {
-                    using (var reader = new JsonTextReader(new StreamReader(Properties.Settings.Default.DefaultConfigPath)))
-                    {
-                        _tfsHipChatConfig = (new JsonSerializer()).Deserialize<TfsHipChatConfig>(reader);
-                    }
-                }
-
-                return _tfsHipChatConfig;
+                Config = (new JsonSerializer()).Deserialize<TfsHipChatConfig>(reader);
             }
         }
+
+        public TfsHipChatConfig Config { get; private set; }
     }
 }
