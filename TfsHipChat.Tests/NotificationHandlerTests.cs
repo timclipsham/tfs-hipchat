@@ -159,7 +159,33 @@ namespace TfsHipChat.Tests
         }
 
         [Fact]
-        public void HandleCheckin_ShouldNotSendNotification_WhenNotificationNotSubscribed()
+        public void HandleCheckin_ShouldSendNotification_WhenSubscribedImplicitly()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var checkinEvent = new CheckinEvent { TeamProject = "TestProject" };
+
+            notificationHandler.HandleCheckin(checkinEvent);
+
+            notifier.ReceivedWithAnyArgs().SendCheckinNotification(null, 0);
+        }
+
+        [Fact]
+        public void HandleCheckin_ShouldSendNotification_WhenSubscribedExplicitly()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var checkinEvent = new CheckinEvent { TeamProject = "ProjectWithOnlyCheckin" };
+
+            notificationHandler.HandleCheckin(checkinEvent);
+
+            notifier.ReceivedWithAnyArgs().SendCheckinNotification(null, 0);
+        }
+
+        [Fact]
+        public void HandleCheckin_ShouldNotSendNotification_WhenNotSubscribed()
         {
             var notifier = Substitute.For<IHipChatNotifier>();
             var configProvider = CreateFakeConfigurationProvider();
