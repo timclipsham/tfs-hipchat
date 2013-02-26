@@ -68,7 +68,7 @@ namespace TfsHipChat
         {
             return
                 _configurationProvider.Config.TeamProjectMappings.SingleOrDefault(
-                    t => t.TeamProjectName.ToLower() == teamProject.ToLower());
+                    t => t.TeamProject.ToLower() == teamProject.ToLower());
         }
 
         private static bool IsNotificationSubscribedTo(TeamProjectMapping teamProjectMapping, Notification notification)

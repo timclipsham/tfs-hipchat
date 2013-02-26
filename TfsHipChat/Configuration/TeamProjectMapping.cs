@@ -7,7 +7,7 @@ namespace TfsHipChat.Configuration
         /// <summary>
         /// Name of the TFS team project that events will be captured from.
         /// </summary>
-        public string TeamProjectName { get; set; }
+        public string TeamProject { get; set; }
         
         /// <summary>
         /// The HipChat room the events will be sent to.
@@ -21,9 +21,9 @@ namespace TfsHipChat.Configuration
         /// <remarks>When null, it is subscribed to all events.</remarks>
         public List<Notification> Notifications { get; set; }
 
-        public TeamProjectMapping(string teamProjectName, int hipChatRoomId)
+        public TeamProjectMapping(string teamProject, int hipChatRoomId)
         {
-            TeamProjectName = teamProjectName;
+            TeamProject = teamProject;
             HipChatRoomId = hipChatRoomId;
         }
     }

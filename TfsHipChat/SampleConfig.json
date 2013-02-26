@@ -19,11 +19,11 @@
 	"teamProjectMappings":
 	[
 		{
-			"teamProjectName": "AwesomeProject1",
+			"teamProject": "AwesomeProject1",
 			"hipChatRoomId": 123
 		},
 		{
-			"teamProjectName": "AwesomeProject2",
+			"teamProject": "AwesomeProject2",
 			"hipChatRoomId": 456,
 			"notifications":
 			[

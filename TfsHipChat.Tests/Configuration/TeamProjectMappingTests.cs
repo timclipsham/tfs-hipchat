@@ -8,10 +8,10 @@ namespace TfsHipChat.Tests.Configuration
     public class TeamProjectMappingTests
     {
         [Fact]
-        public void TeamProjectName_ShouldReturnTeamProjectName_WhenValidJson()
+        public void TeamProject_ShouldReturnTeamProject_WhenValidJson()
         {
             var mapping = GetTeamProjectMapping();
-            Assert.Equal("TestProject", mapping.TeamProjectName);
+            Assert.Equal("TestProject", mapping.TeamProject);
         }
 
         [Fact]
