@@ -25,7 +25,12 @@ namespace TfsHipChat
         {
             var teamProjectMapping = FindTeamProjectMapping(checkinEvent.TeamProject);
 
-            if (teamProjectMapping != null)
+            if (teamProjectMapping == null)
+            {
+                return;
+            }
+
+            if (IsNotificationSubscribedTo(teamProjectMapping, Notification.Checkin))
             {
                 _hipChatNotifier.SendCheckinNotification(checkinEvent, teamProjectMapping.HipChatRoomId);
             }

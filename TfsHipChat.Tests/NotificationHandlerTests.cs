@@ -158,6 +158,19 @@ namespace TfsHipChat.Tests
             notifier.DidNotReceiveWithAnyArgs().SendBuildFailedNotification(null, 0);
         }
 
+        [Fact]
+        public void HandleCheckin_ShouldNotSendNotification_WhenNotificationNotSubscribed()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var checkinEvent = new CheckinEvent { TeamProject = "ProjectWithOnlyBuild" };
+
+            notificationHandler.HandleCheckin(checkinEvent);
+
+            notifier.DidNotReceiveWithAnyArgs().SendCheckinNotification(null, 0);
+        }
+
         private static IConfigurationProvider CreateFakeConfigurationProvider()
         {
             var config = new TfsHipChatConfig
@@ -169,6 +182,10 @@ namespace TfsHipChat.Tests
                                                                new TeamProjectMapping("ProjectWithOnlyCheckin", 789)
                                                                    {
                                                                        Notifications = new List<Notification> { Notification.Checkin }
+                                                                   },
+                                                               new TeamProjectMapping("ProjectWithOnlyBuild", 789)
+                                                                   {
+                                                                       Notifications = new List<Notification> { Notification.BuildCompletionSuccess }
                                                                    }
                                                            }
                              };
