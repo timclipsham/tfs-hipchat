@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.ServiceModel;
 using System.Xml.Serialization;
 using System;
 using System.Xml.Linq;
@@ -6,14 +7,10 @@ using TfsHipChat.Tfs.Events;
 
 namespace TfsHipChat
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class TfsHipChatEventService : IEventService
     {
         private readonly INotificationHandler _notificationHandler;
-
-        // TODO: replace poor man's IoC with a full solution
-        public TfsHipChatEventService() : this(new NotificationHandler())
-        {
-        }
 
         public TfsHipChatEventService(INotificationHandler notificationHandler)
         {

@@ -8,10 +8,6 @@ namespace TfsHipChat
     {
         private readonly IConfigurationProvider _configurationProvider;
         private readonly HipChatClient _hipChatClient;
-
-        public HipChatNotifier() : this(new ConfigurationProvider())
-        {
-        }
         
         public HipChatNotifier(IConfigurationProvider configurationProvider)
         {
