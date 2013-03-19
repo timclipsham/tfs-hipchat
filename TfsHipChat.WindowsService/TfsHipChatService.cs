@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceProcess;
-using Newtonsoft.Json;
 using TfsHipChat.Configuration;
 using TfsHipChat.WindowsService.Properties;
 
@@ -20,16 +19,15 @@ namespace TfsHipChat.WindowsService
 
         protected override void OnStart(string[] args)
         {
-            var servicePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var configPath = Path.Combine(servicePath ?? "", Settings.Default.DefaultConfigPath);
-            var error = ValidateConfiguration(configPath);
+            var configurationProvider = new ConfigurationProvider { Path = GetConfigPath() };
+            var errors = configurationProvider.Validate();
 
-            if (error != null)
+            if (errors.Count > 0)
             {
-                throw new Exception(error);
+                var message = String.Join("\n", errors);
+                throw new Exception(message);
             }
-
-            var configurationProvider = new ConfigurationProvider(configPath);
+            
             var hipChatNotifier = new HipChatNotifier(configurationProvider);
             var notificationHandler = new NotificationHandler(hipChatNotifier, configurationProvider);
             _host = new ServiceHost(new TfsHipChatEventService(notificationHandler));
@@ -41,30 +39,10 @@ namespace TfsHipChat.WindowsService
             _host.Close();
         }
 
-        private static string ValidateConfiguration(string path)
+        private static string GetConfigPath()
         {
-            string error = null;
-
-            try
-            {
-                // ReSharper disable ObjectCreationAsStatement
-                new ConfigurationProvider(path);
-                // ReSharper restore ObjectCreationAsStatement
-            }
-            catch (FileNotFoundException)
-            {
-                error = String.Format(
-                    "Can't find configuration file. Copy SampleConfig.json to {0} and fill in the blanks.",
-                    path);
-            }
-            catch (JsonReaderException)
-            {
-                error = String.Format(
-                    "Can't parse the {0} configuration file. Ensure it is a valid JSON file.",
-                    path);
-            }
-
-            return error;
+            var servicePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return Path.Combine(servicePath ?? "", Settings.Default.DefaultConfigPath);
         }
     }
 }
