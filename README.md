@@ -17,10 +17,14 @@ TFS HipChat can be setup as a console app or as a windows service.
 2. Copy `SampleConfig.json` to `Config.json` and set your preferences
 3. Grant access to `NETWORK SERVICE` to register the url (requires elevated prompt):
 
-    `netsh http add urlacl url=http://+:8731/TfsHipChat user="NETWORK SERVICE"`
+        netsh http add urlacl url=http://+:8731/TfsHipChat user="NETWORK SERVICE"
 
 4. Grant `NETWORK SERVICE` read access to the TFS HipChat files
-5. Install the windows service using `TfsHipChat.WindowsService.exe /i` (requires elevated prompt)
+5. Install the windows service (requires elevated prompt)
+
+        TfsHipChat.WindowsService.exe /i    # run to install
+        TfsHipChat.WindowsService.exe /u    # run to uninstall
+
 6. Configure your TFS instance to push notifications for the desired events
 
 NOTE: The windows service sends errors to the windows Event Log and not to the console.
