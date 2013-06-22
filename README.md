@@ -27,7 +27,7 @@ TFS HipChat can be setup as a console app or as a windows service.
 
 6. Configure your TFS instance to push notifications for the desired events
 
-NOTE: The windows service sends errors to the windows Event Log and not to the console.
+NOTE: The windows service sends errors to the windows event log and not to the console.
 
 ### How to: Configure your TFS instance
 #### Using the web UI
