@@ -33,11 +33,11 @@ namespace TfsHipChat.Tests
         }
 
         [Fact]
-        public void Notify_ShouldHandleCheckinEvent_WhenCheckinEvent()
+        public void Notify_ShouldHandleCheckinEvent()
         {
             var notificationHandler = Substitute.For<INotificationHandler>();
             var eventService = new TfsHipChatEventService(notificationHandler);
-            var eventXml = CreateCheckinEvent();
+            var eventXml = CreateEvent<CheckinEvent>();
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
@@ -45,36 +45,23 @@ namespace TfsHipChat.Tests
         }
 
         [Fact]
-        public void Notify_ShouldHandleBuildCompletionEvent_WhenBuildCompletionEvent()
+        public void Notify_ShouldHandleBuildCompletionEvent()
         {
             var notificationHandler = Substitute.For<INotificationHandler>();
             var eventService = new TfsHipChatEventService(notificationHandler);
-            var eventXml = CreateBuildCompletionEvent();
+            var eventXml = CreateEvent<BuildCompletionEvent>();
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
             notificationHandler.ReceivedWithAnyArgs().HandleBuildCompletion(null);
         }
 
-        private static string CreateCheckinEvent()
+        private static string CreateEvent<T>() where T : new()
         {
-            var checkinEvent = new CheckinEvent();
-
-            var serializer = new XmlSerializer(typeof(CheckinEvent));
+            var eventObject = new T();
+            var serializer = new XmlSerializer(typeof(T));
             var sw = new StringWriter();
-            serializer.Serialize(sw, checkinEvent);
-
-            return sw.ToString();
-        }
-
-        private static string CreateBuildCompletionEvent()
-        {
-            var buildEvent = new BuildCompletionEvent();
-
-            var serializer = new XmlSerializer(typeof(BuildCompletionEvent));
-            var sw = new StringWriter();
-            serializer.Serialize(sw, buildEvent);
-
+            serializer.Serialize(sw, eventObject);
             return sw.ToString();
         }
     }
