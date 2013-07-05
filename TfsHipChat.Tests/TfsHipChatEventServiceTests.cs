@@ -37,7 +37,7 @@ namespace TfsHipChat.Tests
         {
             var notificationHandler = Substitute.For<INotificationHandler>();
             var eventService = new TfsHipChatEventService(notificationHandler);
-            var eventXml = CreateEvent<CheckinEvent>();
+            var eventXml = CreateSerializedEvent<CheckinEvent>();
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
@@ -49,14 +49,26 @@ namespace TfsHipChat.Tests
         {
             var notificationHandler = Substitute.For<INotificationHandler>();
             var eventService = new TfsHipChatEventService(notificationHandler);
-            var eventXml = CreateEvent<BuildCompletionEvent>();
+            var eventXml = CreateSerializedEvent<BuildCompletionEvent>();
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
             notificationHandler.ReceivedWithAnyArgs().HandleBuildCompletion(null);
         }
 
-        private static string CreateEvent<T>() where T : new()
+        [Fact]
+        public void Notify_ShouldHandleBuildCompletedEvent()
+        {
+            var notificationHandler = Substitute.For<INotificationHandler>();
+            var eventService = new TfsHipChatEventService(notificationHandler);
+            var eventXml = CreateSerializedEvent<BuildCompletedEvent>();
+
+            eventService.Notify(eventXml, TfsIdentityXml);
+
+            notificationHandler.ReceivedWithAnyArgs().HandleBuildCompleted(null);
+        }
+
+        private static string CreateSerializedEvent<T>() where T : new()
         {
             var eventObject = new T();
             var serializer = new XmlSerializer(typeof(T));

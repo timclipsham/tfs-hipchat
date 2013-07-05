@@ -60,6 +60,7 @@
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TfsHipChatEventService.cs" />
+    <Compile Include="Tfs\Events\BuildCompletedEvent.cs" />
     <Compile Include="Tfs\Events\BuildCompletionEvent.cs" />
     <Compile Include="Tfs\Events\CheckinEvent.cs" />
     <Compile Include="Tfs\IUserNameFormatter.cs" />

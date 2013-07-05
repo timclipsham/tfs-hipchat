@@ -58,6 +58,11 @@ namespace TfsHipChat
             }
         }
 
+        public void HandleBuildCompleted(BuildCompletedEvent buildEvent)
+        {
+            throw new System.NotImplementedException();
+        }
+
         private TeamProjectMapping FindTeamProjectMapping(string teamProject)
         {
             return
