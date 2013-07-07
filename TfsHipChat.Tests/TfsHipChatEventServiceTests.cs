@@ -74,6 +74,18 @@ namespace TfsHipChat.Tests
             notificationHandler.ReceivedWithAnyArgs().HandleBuildCompletion(null);
         }
 
+        [Fact]
+        public void Notify_ShouldHandleBuildCompletedEvent2()
+        {
+            var notificationHandler = Substitute.For<INotificationHandler>();
+            var eventService = new TfsHipChatEventService(notificationHandler);
+            var eventXml = CreateSerializedEvent<BuildCompletionEvent2>();
+
+            eventService.Notify(eventXml, TfsIdentityXml);
+
+            notificationHandler.ReceivedWithAnyArgs().HandleBuildCompletion(null);
+        }
+
         private static string CreateSerializedEvent<T>() where T : new()
         {
             var eventObject = new T();
