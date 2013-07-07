@@ -3,7 +3,7 @@
 namespace TfsHipChat.Tfs.Events
 {
     /// <summary>
-    /// Object model for deserializing a TFS build completion event.
+    /// Object model for deserializing a TFS BuildCompletionEvent.
     /// </summary>
     [XmlRoot]
     public class BuildCompletionEvent

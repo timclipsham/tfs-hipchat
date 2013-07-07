@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace TfsHipChat.Tfs.Events
 {
     /// <summary>
-    /// Object model for deserializing a TFS check-in event.
+    /// Object model for deserializing a TFS CheckinEvent.
     /// </summary>
     [XmlRoot]
     public class CheckinEvent
