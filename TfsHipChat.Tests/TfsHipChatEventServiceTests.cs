@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NSubstitute;
 using TfsHipChat.Tfs.Events;
 using Xunit;
@@ -61,16 +62,26 @@ namespace TfsHipChat.Tests
         {
             var notificationHandler = Substitute.For<INotificationHandler>();
             var eventService = new TfsHipChatEventService(notificationHandler);
-            var eventXml = CreateSerializedEvent<BuildCompletedEvent>();
+            var eventXml = CreateSerializedEvent(new BuildCompletedEvent
+                                 {
+                                     Build = new BuildDetail(),
+                                     Controller = new BuildController(),
+                                     Requests = new List<QueuedBuild>(new[] {new QueuedBuild()})
+                                 });
 
             eventService.Notify(eventXml, TfsIdentityXml);
 
-            notificationHandler.ReceivedWithAnyArgs().HandleBuildCompleted(null);
+            notificationHandler.ReceivedWithAnyArgs().HandleBuildCompletion(null);
         }
 
         private static string CreateSerializedEvent<T>() where T : new()
         {
             var eventObject = new T();
+            return CreateSerializedEvent(eventObject);
+        }
+
+        private static string CreateSerializedEvent<T>(T eventObject) where T : new()
+        {
             var serializer = new XmlSerializer(typeof(T));
             var sw = new StringWriter();
             serializer.Serialize(sw, eventObject);
