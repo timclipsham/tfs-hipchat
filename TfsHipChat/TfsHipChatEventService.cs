@@ -53,25 +53,25 @@ namespace TfsHipChat
         private static BuildCompletionEvent ConvertToBuildCompletionEvent(BuildCompletedEvent buildEvent)
         {
             return new BuildCompletionEvent
-                       {
-                           TeamFoundationServerUrl = buildEvent.TeamProjectCollectionUrl,
-                           TeamProject = buildEvent.Build.TeamProject,
-                           Id = buildEvent.Build.BuildNumber,
-                           Url = buildEvent.WebAccessUri,
-                           Title = buildEvent.Title,
-                           CompletionStatus =
-                               (buildEvent.Build.Status == BuildStatus.Succeeded)
-                               ? "Successfully Completed"
-                               : buildEvent.Build.Status.ToString(),
-                           Subscriber = buildEvent.Subscriber,
-                           //Configuration = "" // No conversion available from BuildCompletedEvent
-                           RequestedBy = buildEvent.Requests[0].RequestedBy,
-                           TimeZone = buildEvent.TimeZone,
-                           TimeZoneOffset = buildEvent.TimeZoneOffset,
-                           BuildStartTime = buildEvent.Build.StartTime.ToString("dd/MM/yyyy hh:mm:ss tt"),
-                           BuildCompleteTime = buildEvent.Build.FinishTime.ToString("dd/MM/yyyy hh:mm:ss tt"),
-                           BuildMachine = buildEvent.Controller.Name
-                       };
+            {
+                TeamFoundationServerUrl = buildEvent.TeamProjectCollectionUrl,
+                TeamProject = buildEvent.Build.TeamProject,
+                Id = buildEvent.Build.BuildNumber,
+                Url = buildEvent.WebAccessUri,
+                Title = buildEvent.Title,
+                CompletionStatus =
+                    (buildEvent.Build.Status == BuildStatus.Succeeded)
+                        ? "Successfully Completed"
+                        : buildEvent.Build.Status.ToString(),
+                Subscriber = buildEvent.Subscriber,
+                //Configuration = "" // No conversion available from BuildCompletedEvent
+                RequestedBy = buildEvent.Requests[0].RequestedFor,
+                TimeZone = buildEvent.TimeZone,
+                TimeZoneOffset = buildEvent.TimeZoneOffset,
+                BuildStartTime = buildEvent.Build.StartTime.ToString("dd/MM/yyyy hh:mm:ss tt"),
+                BuildCompleteTime = buildEvent.Build.FinishTime.ToString("dd/MM/yyyy hh:mm:ss tt"),
+                BuildMachine = buildEvent.Controller.Name
+            };
         }
 
         private static BuildCompletionEvent ConvertToBuildCompletionEvent(BuildCompletionEvent2 buildEvent)
@@ -86,7 +86,7 @@ namespace TfsHipChat
                 CompletionStatus = buildEvent.Status,
                 Subscriber = buildEvent.Subscriber,
                 //Configuration = "" // No conversion available from BuildCompletionEvent2
-                RequestedBy = buildEvent.RequestedBy,
+                RequestedBy = buildEvent.RequestedFor,
                 TimeZone = buildEvent.TimeZone,
                 TimeZoneOffset = buildEvent.TimeZoneOffset,
                 BuildStartTime = buildEvent.StartTime,
