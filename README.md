@@ -54,7 +54,7 @@ Using this tool you can register TFS HipChat to be notified on specific events b
 ### What is currently supported?
 #### Event types
  * CheckinEvent
- * BuildCompletionEvent
+ * BuildCompletedEvent (also BuildCompletionEvent / BuildCompletionEvent2)
 
 #### TFS Versions
  * TFS 2010
