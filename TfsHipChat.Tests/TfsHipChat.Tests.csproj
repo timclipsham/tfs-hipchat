@@ -40,6 +40,7 @@
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.5.0.0\lib\NET40\NSubstitute.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="xunit">
@@ -53,6 +54,7 @@
     <Compile Include="TfsHipChatEventServiceTests.cs" />
     <Compile Include="Tfs\Events\BuildCompletionEventTests.cs" />
     <Compile Include="Tfs\Events\CheckinEventTests.cs" />
+    <Compile Include="Tfs\Events\WorkItemChangedEventTests.cs" />
     <Compile Include="Tfs\TfsIdentityTests.cs" />
     <Compile Include="Tfs\StandardDomainUserNameFormatterTests.cs" />
   </ItemGroup>

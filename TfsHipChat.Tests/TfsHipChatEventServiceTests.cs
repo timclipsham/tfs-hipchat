@@ -24,13 +24,13 @@ namespace TfsHipChat.Tests
         }
 
         [Fact]
-        public void Notify_ShouldThrowException_WhenUnsupportedEvent()
+        public void Notify_ShouldNotThrowException_WhenUnsupportedEvent()
         {
             var notificationHandler = Substitute.For<INotificationHandler>();
             var eventService = new TfsHipChatEventService(notificationHandler);
             const string eventXml = "<EventThatDoesNotExist></EventThatDoesNotExist>";
 
-            Assert.Throws<NotSupportedException>(() => eventService.Notify(eventXml, TfsIdentityXml));
+            Assert.DoesNotThrow(() => eventService.Notify(eventXml, TfsIdentityXml));
         }
 
         [Fact]
@@ -84,6 +84,30 @@ namespace TfsHipChat.Tests
             eventService.Notify(eventXml, TfsIdentityXml);
 
             notificationHandler.ReceivedWithAnyArgs().HandleBuildCompletion(null);
+        }
+
+        [Fact]
+        public void Notify_ShouldHandleWorkItemChangedEvent()
+        {
+            var notificationHandler = Substitute.For<INotificationHandler>();
+            var eventService = new TfsHipChatEventService(notificationHandler);
+            var eventXml = CreateSerializedEvent<WorkItemChangedEvent>();
+
+            eventService.Notify(eventXml, TfsIdentityXml);
+
+            notificationHandler.ReceivedWithAnyArgs().HandleWorkItemChanged(null);
+        }
+
+        [Fact]
+        public void Notify_ShouldHandleBuildStatusChangeEvent()
+        {
+            var notificationHandler = Substitute.For<INotificationHandler>();
+            var eventService = new TfsHipChatEventService(notificationHandler);
+            var eventXml = CreateSerializedEvent<BuildStatusChangeEvent>();
+
+            eventService.Notify(eventXml, TfsIdentityXml);
+
+            notificationHandler.ReceivedWithAnyArgs().HandleBuildStatusChange(null);
         }
 
         private static string CreateSerializedEvent<T>() where T : new()

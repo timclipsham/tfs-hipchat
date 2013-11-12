@@ -30,8 +30,10 @@ namespace TfsHipChat.Configuration
 
     public enum Notification
     {
+        Unknown,
         Checkin,
         BuildCompletionSuccess,
-        BuildCompletionFailure
+        BuildCompletionFailure,
+        TaskWorkChange
     }
 }
