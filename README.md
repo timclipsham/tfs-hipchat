@@ -55,6 +55,8 @@ Using this tool you can register TFS HipChat to be notified on specific events b
 #### Event types
  * CheckinEvent
  * BuildCompletedEvent (also BuildCompletionEvent / BuildCompletionEvent2)
+ * WorkItemChangedEvent (Task state, remaining work, owner or history changed)
+ * BuildStatusChangeEvent ('Build quality' change)
 
 #### TFS Versions
  * TFS 2010

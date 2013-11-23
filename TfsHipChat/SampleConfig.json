@@ -3,8 +3,10 @@
  * Make a copy of this file named "Config.json" and fill in the blanks :)
  */
 {
-	/* Who the notification is sent from in the HipChat room */
-	"hipChatFrom": "TFS",
+	/* Who the notification is sent from in the HipChat room. If provided here, this value 
+	 * will override the dynamically-generated From values ('Build', 'Source', etc) 
+	 */
+	/* "hipChatFrom": "TFS", */
 	
 	/* Token for connecting to the HipChat API */
 	"hipChatToken": "your_hipchat_token_goes_here",

@@ -6,5 +6,7 @@ namespace TfsHipChat
     {
         void HandleCheckin(CheckinEvent checkinEvent);
         void HandleBuildCompletion(BuildCompletionEvent buildEvent);
+        void HandleWorkItemChanged(WorkItemChangedEvent changedEvent);
+        void HandleBuildStatusChange(BuildStatusChangeEvent buildStatusChangedEvent);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NSubstitute;
 using TfsHipChat.Configuration;
 using TfsHipChat.Tfs.Events;
@@ -221,6 +222,167 @@ namespace TfsHipChat.Tests
             notificationHandler.HandleCheckin(checkinEvent);
 
             notifier.DidNotReceiveWithAnyArgs().SendCheckinNotification(null, 0);
+        }
+
+        [Fact]
+        public void HandleWorkItemChanged_ShouldNotSendNotification_WhenWorkItemTypeIsNotTask()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var changedEvent = new WorkItemChangedEvent() { PortfolioProject = "TestProject", ChangeType = "foo"};
+
+            notificationHandler.HandleWorkItemChanged(changedEvent);
+
+            notifier.DidNotReceiveWithAnyArgs().SendTaskChangedRemainingNotification(null, 0);
+            notifier.DidNotReceiveWithAnyArgs().SendTaskOwnerChangedNotification(null, 0);
+            notifier.DidNotReceiveWithAnyArgs().SendTaskStateChangedNotification(null, 0);
+            notifier.DidNotReceiveWithAnyArgs().SendTaskHistoryCommentNotification(null, 0);
+        }
+
+        [Fact]
+        public void HandleWorkItemChanged_ShouldNotSendNotification_WhenChangeTypeIsNotChange()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var changedEvent = new WorkItemChangedEvent()
+                {
+                    PortfolioProject = "TestProject", 
+                    ChangeType = "foo",
+                    CoreFields = { StringFields = new[] { new Field() { Name = "Work Item Type", NewValue = "Product Backlog Item" } } },
+                    ChangedFields = { StringFields = new[] { new Field() { Name = "State", NewValue = "In Progress" } } }
+                };
+
+            notificationHandler.HandleWorkItemChanged(changedEvent);
+
+            notifier.DidNotReceiveWithAnyArgs().SendTaskChangedRemainingNotification(null, 0);
+            notifier.DidNotReceiveWithAnyArgs().SendTaskOwnerChangedNotification(null, 0);
+            notifier.DidNotReceiveWithAnyArgs().SendTaskStateChangedNotification(null, 0);
+            notifier.DidNotReceiveWithAnyArgs().SendTaskHistoryCommentNotification(null, 0);
+        }
+
+        [Fact]
+        public void HandleWorkItemChanged_ShouldSendNotification_WhenTaskStateIsChanged()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var changedEvent = new WorkItemChangedEvent
+                {
+                    PortfolioProject = "TestProject",
+                    ChangeType = "Change",
+                    CoreFields = { StringFields = new[] {new Field() {Name = "Work Item Type", NewValue = "Task"}} },
+                    ChangedFields = { StringFields = new[] {new Field() {Name = "State", NewValue = "In Progress"}} }
+                };
+
+            notificationHandler.HandleWorkItemChanged(changedEvent);
+
+            notifier.ReceivedWithAnyArgs().SendTaskStateChangedNotification(null, 0);
+        }
+
+        [Fact]
+        public void HandleWorkItemChanged_ShouldSendNotification_WhenTaskIsInProgressAndRemainingWorkIsChanged()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var changedEvent = new WorkItemChangedEvent
+                {
+                    PortfolioProject = "TestProject",
+                    ChangeType = "Change",
+                    CoreFields =
+                        {
+                            StringFields = new[]
+                                {
+                                    new Field() {Name = "Work Item Type", NewValue = "Task"},
+                                    new Field() {Name = "State", NewValue = "In Progress"}
+                                }
+                        },
+                    ChangedFields = {IntegerFields = new[] {new Field() {Name = "Remaining Work", NewValue = "3"}}}
+                };
+
+            notificationHandler.HandleWorkItemChanged(changedEvent);
+
+            notifier.ReceivedWithAnyArgs().SendTaskChangedRemainingNotification(null, 0);
+        }
+
+        [Fact]
+        public void HandleWorkItemChanged_ShouldSendNotification_WhenTaskIsInProgressAndAssignedToChanged()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var changedEvent = new WorkItemChangedEvent
+            {
+                PortfolioProject = "TestProject",
+                ChangeType = "Change",
+                CoreFields =
+                {
+                    StringFields = new[]
+                                {
+                                    new Field() {Name = "Work Item Type", NewValue = "Task"},
+                                    new Field() {Name = "State", NewValue = "In Progress"}
+                                }
+                },
+                ChangedFields = { StringFields = new[] { new Field { Name = "Assigned To", NewValue = "Brock Lee" } } }
+            };
+
+            notificationHandler.HandleWorkItemChanged(changedEvent);
+
+            notifier.ReceivedWithAnyArgs().SendTaskOwnerChangedNotification(null, 0);
+        }
+
+        [Fact]
+        public void HandleWorkItemChanged_ShouldSendNotification_WhenTaskHistoryChanged()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var changedEvent = new WorkItemChangedEvent
+            {
+                PortfolioProject = "TestProject",
+                ChangeType = "Change",
+                CoreFields =
+                {
+                    StringFields = new[]
+                                {
+                                    new Field() {Name = "Work Item Type", NewValue = "Task"},
+                                    new Field() {Name = "State", NewValue = "In Progress"}
+                                }
+                },
+                TextFields = new [] { new TextField() { Name = "History", Value = "The rest is" } } 
+            };
+
+            notificationHandler.HandleWorkItemChanged(changedEvent);
+
+            notifier.ReceivedWithAnyArgs().SendTaskHistoryCommentNotification(null, 0);
+        }
+
+        [Fact]
+        public void HandleWorkItemChanged_ShouldNotSendNotification_WhenTaskHistoryChangedIsAutomaticChangesetComment()
+        {
+            var notifier = Substitute.For<IHipChatNotifier>();
+            var configProvider = CreateFakeConfigurationProvider();
+            var notificationHandler = new NotificationHandler(notifier, configProvider);
+            var changedEvent = new WorkItemChangedEvent
+            {
+                PortfolioProject = "TestProject",
+                ChangeType = "Change",
+                CoreFields =
+                {
+                    StringFields = new[]
+                                {
+                                    new Field() {Name = "Work Item Type", NewValue = "Task"},
+                                    new Field() {Name = "State", NewValue = "In Progress"}
+                                }
+                },
+                TextFields = new[] { new TextField() { Name = "History", Value = "Associated with changeset 123456" } }
+            };
+
+            notificationHandler.HandleWorkItemChanged(changedEvent);
+
+            notifier.DidNotReceiveWithAnyArgs().SendTaskHistoryCommentNotification(null, 0);
         }
 
         private static IConfigurationProvider CreateFakeConfigurationProvider()

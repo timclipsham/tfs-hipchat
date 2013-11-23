@@ -11,42 +11,74 @@ namespace TfsHipChat
     public class TfsHipChatEventService : IEventService
     {
         private readonly INotificationHandler _notificationHandler;
+        private readonly ILogger _logger;
 
         public TfsHipChatEventService(INotificationHandler notificationHandler)
         {
             _notificationHandler = notificationHandler;
+            _logger = LoggerInstance.Current;
         }
 
         public void Notify(string eventXml, string tfsIdentityXml)
         {
-            var xml = XElement.Parse(eventXml);
-
-            switch (xml.Name.LocalName)
+            try
             {
-                case "CheckinEvent":
-                    _notificationHandler.HandleCheckin(
-                        DeserializeXmlToType<CheckinEvent>(eventXml));
-                    break;
+                var xml = XElement.Parse(eventXml);
 
-                case "BuildCompletionEvent":
-                    _notificationHandler.HandleBuildCompletion(
-                        DeserializeXmlToType<BuildCompletionEvent>(eventXml));
-                    break;
+                var titleElement = xml.Element("Title");
+                string title = titleElement == null
+                                   ? null
+                                   : titleElement.Value;
 
-                case "BuildCompletionEvent2":
-                    _notificationHandler.HandleBuildCompletion(
-                        ConvertToBuildCompletionEvent(
-                            DeserializeXmlToType<BuildCompletionEvent2>(eventXml)));
-                    break;
+                Console.WriteLine("[Info] Received {0}{1}",
+                                  xml.Name.LocalName,
+                                  title == null ? null : ": " + title);
+                File.WriteAllText("last-tfs-event.log", eventXml);
 
-                case "BuildCompletedEvent":
-                    _notificationHandler.HandleBuildCompletion(
-                        ConvertToBuildCompletionEvent(
-                            DeserializeXmlToType<BuildCompletedEvent>(eventXml)));
-                    break;
+                switch (xml.Name.LocalName)
+                {
+                    case "CheckinEvent":
+                        _notificationHandler.HandleCheckin(
+                            DeserializeXmlToType<CheckinEvent>(eventXml));
+                        break;
 
-                default:
-                    throw new NotSupportedException("The event received is not supported.");
+                    case "BuildCompletionEvent":
+                        _notificationHandler.HandleBuildCompletion(
+                            DeserializeXmlToType<BuildCompletionEvent>(eventXml));
+                        break;
+
+                    case "BuildCompletionEvent2":
+                        _notificationHandler.HandleBuildCompletion(
+                            ConvertToBuildCompletionEvent(
+                                DeserializeXmlToType<BuildCompletionEvent2>(eventXml)));
+                        break;
+
+                    case "BuildCompletedEvent":
+                        _notificationHandler.HandleBuildCompletion(
+                            ConvertToBuildCompletionEvent(
+                                DeserializeXmlToType<BuildCompletedEvent>(eventXml)));
+                        break;
+
+                    case "WorkItemChangedEvent":
+                        _notificationHandler.HandleWorkItemChanged(
+                            DeserializeXmlToType<WorkItemChangedEvent>(eventXml));
+                        break;
+
+                    case "BuildStatusChangeEvent":
+                        _notificationHandler.HandleBuildStatusChange(
+                            DeserializeXmlToType<BuildStatusChangeEvent>(eventXml));
+                        break;
+
+                    default:
+                        _logger.Warn("Ignored unsupported event {0}", xml.Name.LocalName);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Info("Message: {0}", eventXml);
+                _logger.Error("Error: {0}", ex);
+                throw;
             }
         }
 

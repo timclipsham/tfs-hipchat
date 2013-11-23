@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
@@ -55,8 +56,10 @@
     <Compile Include="Configuration\TeamProjectMapping.cs" />
     <Compile Include="HipChatNotifier.cs" />
     <Compile Include="IEventService.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="INotificationHandler.cs" />
     <Compile Include="IHipChatNotifier.cs" />
+    <Compile Include="LoggerInstance.cs" />
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TfsHipChatEventService.cs" />
@@ -71,11 +74,15 @@
     <Compile Include="Tfs\Events\BuildPhaseStatus.cs" />
     <Compile Include="Tfs\Events\BuildReason.cs" />
     <Compile Include="Tfs\Events\BuildStatus.cs" />
+    <Compile Include="Tfs\Events\BuildStatusChangeEvent.cs" />
     <Compile Include="Tfs\Events\CheckinEvent.cs" />
     <Compile Include="Tfs\Events\ControllerStatus.cs" />
     <Compile Include="Tfs\Events\DefinitionQueueStatus.cs" />
     <Compile Include="Tfs\Events\DefinitionTriggerType.cs" />
     <Compile Include="Tfs\Events\DeleteOptions.cs" />
+    <Compile Include="Tfs\Events\Field.cs" />
+    <Compile Include="Tfs\Events\FieldChange.cs" />
+    <Compile Include="Tfs\Events\FieldGroup.cs" />
     <Compile Include="Tfs\Events\GetOption.cs" />
     <Compile Include="Tfs\Events\InformationField.cs" />
     <Compile Include="Tfs\Events\NameValueField.cs" />
@@ -87,6 +94,8 @@
     <Compile Include="Tfs\Events\RetensionPolicy.cs" />
     <Compile Include="Tfs\Events\Schedule.cs" />
     <Compile Include="Tfs\Events\ScheduleDays.cs" />
+    <Compile Include="Tfs\Events\TextField.cs" />
+    <Compile Include="Tfs\Events\WorkItemChangedEvent.cs" />
     <Compile Include="Tfs\Events\WorkspaceMapping.cs" />
     <Compile Include="Tfs\Events\WorkspaceMappingType.cs" />
     <Compile Include="Tfs\Events\WorkspaceTemplate.cs" />
